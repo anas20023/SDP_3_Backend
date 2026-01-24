@@ -29,3 +29,5 @@
 2026-01-25 00:26:08:268 [35mhttp[39m: [35mPOST /api/auth/logout 401 27 - 1.600 ms[39m
 2026-01-25 00:26:11:2611 [35mhttp[39m: [35mPOST /api/auth/logout 401 27 - 0.853 ms[39m
 2026-01-25 00:29:46:2946 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 18.087 ms[39m
+2026-01-25 00:30:02:302 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:30:03:303 [35mhttp[39m: [35mPOST /api/auth/logout 500 1126 - 2.089 ms[39m
