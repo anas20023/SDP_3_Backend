@@ -38,3 +38,6 @@
 2026-01-24 23:48:12:4812 [32minfo[39m: [32mBackend running on port 3000[39m
 2026-01-24 23:48:13:4813 [32minfo[39m: [32mBackend running on port 3000[39m
 2026-01-24 23:48:13:4813 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:48:21:4821 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:48:21:4821 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:48:37:4837 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 287.725 ms[39m
