@@ -1,0 +1,14 @@
+2026-01-24 23:30:09:309 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:30:45:3045 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:31:10:3110 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:31:28:3128 [35mhttp[39m: [35mGET /api 200 32 - 1.651 ms[39m
+2026-01-24 23:34:51:3451 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:34:51:3451 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:35:05:355 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:35:05:355 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:35:10:3510 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:35:10:3510 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:36:00:360 [35mhttp[39m: [35mPOST /apiauth/register 404 156 - 1.418 ms[39m
+2026-01-24 23:36:59:3659 [35mhttp[39m: [35mPOST /api/auth/register 201 132 - 304.560 ms[39m
+2026-01-24 23:37:28:3728 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:37:28:3728 [32minfo[39m: [32mBackend running on port 3000[39m

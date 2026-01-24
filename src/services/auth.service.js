@@ -1,0 +1,57 @@
+import User from '../model/users.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+const register = async (userData) => {
+    // Check if user already exists
+    const existingUser = await User.findOne({
+        $or: [{ email: userData.email }, { user_id: userData.user_id }]
+    });
+
+    if (existingUser) {
+        throw new Error('User already exists with this email or user_id');
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(userData.password, salt);
+
+    // Create new user
+    const user = new User({
+        ...userData,
+        passwordHash: hashedPassword,
+    });
+
+    await user.save();
+    return user;
+};
+
+const login = async (email, password) => {
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new Error('Invalid credentials');
+    }
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+        throw new Error('Invalid credentials');
+    }
+
+    // Generate Token
+    const token = jwt.sign(
+        { user_id: user._id, email: user.email, role: user.role },
+        process.env.JWT_SECRET || 'your_jwt_secret_key', // Fallback for dev - Ensure .env is set
+        {
+            expiresIn: '24h',
+        }
+    );
+
+    return { user, token };
+};
+
+export default {
+    register,
+    login
+}
