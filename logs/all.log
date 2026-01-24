@@ -1,1 +1,31 @@
 2026-01-24 23:53:28:5328 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:20:11:2011 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:20:12:2012 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 3.178 ms[39m
+2026-01-25 00:20:14:2014 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.479 ms[39m
+2026-01-25 00:20:19:2019 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.215 ms[39m
+2026-01-25 00:21:24:2124 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 239.793 ms[39m
+2026-01-25 00:21:35:2135 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.254 ms[39m
+2026-01-25 00:21:57:2157 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:21:59:2159 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:22:00:220 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 1.924 ms[39m
+2026-01-25 00:22:06:226 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.790 ms[39m
+2026-01-25 00:22:43:2243 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.306 ms[39m
+2026-01-25 00:23:18:2318 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.194 ms[39m
+2026-01-25 00:23:23:2323 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.272 ms[39m
+2026-01-25 00:23:32:2332 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:23:36:2336 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:24:23:2423 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:24:25:2425 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:24:29:2429 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 376.483 ms[39m
+2026-01-25 00:24:50:2450 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 0.554 ms[39m
+2026-01-25 00:25:07:257 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:25:37:2537 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:25:39:2539 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 499.705 ms[39m
+2026-01-25 00:25:44:2544 [35mhttp[39m: [35mPOST /api/auth/logout 401 27 - 2.850 ms[39m
+2026-01-25 00:25:57:2557 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:26:00:260 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:26:02:262 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-25 00:26:04:264 [35mhttp[39m: [35mPOST /api/auth/logout 401 27 - 2.536 ms[39m
+2026-01-25 00:26:08:268 [35mhttp[39m: [35mPOST /api/auth/logout 401 27 - 1.600 ms[39m
+2026-01-25 00:26:11:2611 [35mhttp[39m: [35mPOST /api/auth/logout 401 27 - 0.853 ms[39m
+2026-01-25 00:29:46:2946 [35mhttp[39m: [35mPOST /api/auth/logout 200 31 - 18.087 ms[39m

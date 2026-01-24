@@ -33,7 +33,6 @@ export const handleLogin = async (req, res) => {
             httpOnly: true,
             sameSite: 'strict'
         });
-
         res.status(200).json({
             message: "Login successful"
         });
@@ -45,6 +44,7 @@ export const handleLogin = async (req, res) => {
 
 export const handleLogout = (req, res) => {
     try {
+        //console.log(req.user);   
         res.cookie('token', '', {
             httpOnly: true,
             maxAge: 0
