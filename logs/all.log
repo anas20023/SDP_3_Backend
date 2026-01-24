@@ -15,3 +15,26 @@
 2026-01-24 23:37:57:3757 [32minfo[39m: [32mBackend running on port 3000[39m
 2026-01-24 23:37:57:3757 [32minfo[39m: [32mBackend running on port 3000[39m
 2026-01-24 23:38:03:383 [35mhttp[39m: [35mPOST /api/auth/register 200 42 - 406.419 ms[39m
+2026-01-24 23:41:24:4124 [35mhttp[39m: [35mPOST /api/auth/login 200 381 - 252.550 ms[39m
+2026-01-24 23:45:16:4516 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:45:16:4516 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:45:47:4547 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:45:47:4547 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:46:32:4632 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 326.066 ms[39m
+2026-01-24 23:46:52:4652 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 275.694 ms[39m
+2026-01-24 23:47:01:471 [35mhttp[39m: [35mPOST /api/auth/login 401 33 - 227.591 ms[39m
+2026-01-24 23:47:09:479 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 209.405 ms[39m
+2026-01-24 23:47:12:4712 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 188.547 ms[39m
+2026-01-24 23:47:13:4713 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 215.818 ms[39m
+2026-01-24 23:47:14:4714 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 178.237 ms[39m
+2026-01-24 23:47:15:4715 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 212.182 ms[39m
+2026-01-24 23:47:16:4716 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 234.477 ms[39m
+2026-01-24 23:47:37:4737 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:47:37:4737 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:47:42:4742 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 284.910 ms[39m
+2026-01-24 23:47:50:4750 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 295.677 ms[39m
+2026-01-24 23:48:01:481 [35mhttp[39m: [35mPOST /api/auth/login 200 30 - 218.250 ms[39m
+2026-01-24 23:48:11:4811 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:48:12:4812 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:48:13:4813 [32minfo[39m: [32mBackend running on port 3000[39m
+2026-01-24 23:48:13:4813 [32minfo[39m: [32mBackend running on port 3000[39m
