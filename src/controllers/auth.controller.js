@@ -55,3 +55,16 @@ export const handleLogout = (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+export const handleProfile= async(req,res)=>{
+    // console.log(req.user)
+    const user=req.user.user_id
+   try {
+     const data= await AuthService.findData(user);
+    res.status(200).json(data)
+   } catch (e) {
+    res.status(400).json({
+        "message":e.message
+    })
+   }
+    // console.log(user)
+}

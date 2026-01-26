@@ -50,8 +50,24 @@ const login = async (email, password) => {
 
     return { user, token };
 };
+const findData = async (user) => {  
+    const res = await User.findById(user)
+    if (!res){
+        throw new Error("User not Found")
+    }
+    const filtered_data={
+        name:res.name,
+        email:res.email,
+        role:res.role,
+        dept:res.dept,
+        intake:res.intake,
+        section:res.section,
+    }
+    return filtered_data
+}
 
 export default {
     register,
-    login
+    login,
+    findData
 }
