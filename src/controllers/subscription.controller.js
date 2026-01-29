@@ -15,3 +15,13 @@ export const createSubscription = async (req, res) => {
         })
     }
 }
+export const getSubscription= async (req,res)=>{
+    try {
+        const data= await subscriptionService.getSubscription();
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(400).json({
+            message:e.message
+        })
+    }
+}

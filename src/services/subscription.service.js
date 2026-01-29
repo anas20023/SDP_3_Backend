@@ -38,3 +38,10 @@ export const createSubscription = async (data) => {
 
     return plan;
 };
+export const getSubscription = async () => {
+    const subs = await SubscriptionPlan.find({},"-_id -createdAt -updatedAt");
+    if (!subs) {
+        throw new Error("No Subscription Found!")
+    }
+    return subs
+} 
