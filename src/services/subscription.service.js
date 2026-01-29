@@ -1,4 +1,4 @@
-import subscriptionSchema from "../model/subscriptionSchema.js";
+import SubscriptionPlan from "../model/subscriptionPlan.js";
 
 export const createSubscription = async (data) => {
     const {
@@ -21,13 +21,13 @@ export const createSubscription = async (data) => {
     }
 
     /* 2️⃣ Prevent duplicate plan name */
-    const existingPlan = await subscriptionSchema.findOne({ name });
+    const existingPlan = await SubscriptionPlan.findOne({ name });
     if (existingPlan) {
         throw new Error("Subscription plan already exists");
     }
 
     /* 3️⃣ Create plan */
-    const plan = await subscriptionSchema.create({
+    const plan = await SubscriptionPlan.create({
         name,
         price,
         durationInDays,
