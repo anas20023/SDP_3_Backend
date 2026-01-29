@@ -1,17 +1,26 @@
-import e from "express";
 import * as subscriptionService from "../services/subscription.service.js";
-export const createSubscription=async(req,res)=>{
-    const data= req.body
-    if(req.user.role!=="admin" || req.user.role!=="mod"){
-       return res.status(401).json({
-            message:"You are not authorized for this Operation"
+export const createSubscription = async (req, res) => {
+    const data = req.body
+    if (req.user.role != "admin") {
+        return res.status(401).json({
+            message: "You are not authorized for this Operation"
         })
     }
     try {
-        const umm= await  subscriptionService.createSubscription(data)
-       return res.status(201).json(umm)
+        const yeapapa_umm = await subscriptionService.createSubscription(data)
+        return res.status(201).json(yeapapa_umm)
     } catch (e) {
-       return res.status(400).json({
+        return res.status(400).json({
+            message: e.message
+        })
+    }
+}
+export const getSubscription= async (req,res)=>{
+    try {
+        const data= await subscriptionService.getSubscription();
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(400).json({
             message:e.message
         })
     }

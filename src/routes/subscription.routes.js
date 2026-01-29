@@ -3,6 +3,7 @@ import verifyToken from '../middlewares/auth.middleware.js';
 import * as subscriptionController from '../controllers/subscription.controller.js'
 const router=Router()
 
-router.post('/',verifyToken, subscriptionController.createSubscription) 
+router.post('/',verifyToken, subscriptionController.createSubscription)  
+router.get('/', subscriptionController.getSubscription)  
 
 export default router
