@@ -1,7 +1,7 @@
 import * as subscriptionService from "../services/subscription.service.js";
 export const createSubscription = async (req, res) => {
     const data = req.body
-    if (req.user.role !== "admin" || req.user.role !== "mod") {
+    if (req.user.role != "admin") {
         return res.status(401).json({
             message: "You are not authorized for this Operation"
         })

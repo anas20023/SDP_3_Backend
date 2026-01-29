@@ -37,3 +37,4 @@ const subscriptionSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false }
 );
+export default subscriptionSchema 
