@@ -43,7 +43,7 @@ export const createSubscription = async (data) => {
 export const getSubscription = async () => {
     const cachehit = subscription_cache.get("subscription_data")
     if (!cachehit) {
-        console.log("Cache Miss")
+        //console.log("Cache Miss")
 
         const subs = await SubscriptionPlan.find({}, "-_id -createdAt -updatedAt");
         if (!subs) {
@@ -52,7 +52,7 @@ export const getSubscription = async () => {
         subscription_cache.set("subscription_data", subs, 1000)
         return subs
     }
-    console.log("Cache Hit")
+    //console.log("Cache Hit")
     return cachehit
 }
 
