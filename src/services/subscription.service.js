@@ -1,4 +1,6 @@
+import NodeCache from "node-cache";
 import SubscriptionPlan from "../model/subscriptionPlan.js";
+const subscription_cache = new NodeCache({ checkperiod: 600 })
 
 export const createSubscription = async (data) => {
     const {
@@ -39,9 +41,18 @@ export const createSubscription = async (data) => {
     return plan;
 };
 export const getSubscription = async () => {
-    const subs = await SubscriptionPlan.find({},"-_id -createdAt -updatedAt");
-    if (!subs) {
-        throw new Error("No Subscription Found!")
+    const cachehit = subscription_cache.get("subscription_data")
+    if (!cachehit) {
+        console.log("Cache Miss")
+
+        const subs = await SubscriptionPlan.find({}, "-_id -createdAt -updatedAt");
+        if (!subs) {
+            throw new Error("No Subscription Found!")
+        }
+        subscription_cache.set("subscription_data", subs, 1000)
+        return subs
     }
-    return subs
-} 
+    console.log("Cache Hit")
+    return cachehit
+}
+
