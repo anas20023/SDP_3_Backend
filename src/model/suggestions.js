@@ -63,7 +63,7 @@ const suggestionSchema = new mongoose.Schema(
         }
     },
     {
-        timestamps: true,   // createdAt, updatedAt
+        timestamps: true,   
         versionKey: false
     }
 );

@@ -10,6 +10,7 @@ const verifyToken = (req, res, next) => {
 
     try {
         const bearer = token.startsWith('Bearer ') ? token.slice(7, token.length) : token;
+        //console.log(bearer)
         const decoded = jwt.verify(bearer, process.env.JWT_SECRET || 'your_jwt_secret_key'); // Fallback for dev
         req.user = decoded;
     } catch (err) {
