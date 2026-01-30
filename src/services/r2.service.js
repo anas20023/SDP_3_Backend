@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import r2Client, { R2_BUCKET, R2_PUBLIC_URL } from "../config/r2.js";
 
+export { R2_PUBLIC_URL };
+
 /**
  * Uploads a file to Cloudflare R2
  * @param {Object} file - Multer file object
