@@ -38,7 +38,7 @@ export const createSubscription = async (data) => {
         features,
         isActive
     });
-
+    subscription_cache.del("subscription_data")
     return plan;
 };
 export const updateSubscription = async (data) => {
@@ -52,8 +52,23 @@ export const updateSubscription = async (data) => {
     if (!up.modifiedCount === 0) {
         throw new Error("Failed to Modify Subscription Plan");
     }
-    return up;
+    subscription_cache.del("subscription_data")
+    return {
+        message:"Subscripion Plan Deleted Successfully !"
+    };
 };
+export const deleteSubscription= async(id)=>{
+    // return id
+    const data= await subscriptionPlan.deleteOne({
+        _id:id
+    })
+    //console.log(data)
+    if(!data.deletedCount){
+        throw new Error("Unable to Delete Subscription Plan")
+    }
+    subscription_cache.del("subscription_data")
+    return data
+}
 export const getSubscription = async () => {
     const cachehit = subscription_cache.get("subscription_data")
     if (!cachehit) {

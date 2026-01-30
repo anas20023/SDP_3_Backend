@@ -10,6 +10,19 @@ export const createSubscription = async (req, res) => {
         })
     }
 }
+export const deleteSubscription= async(req,res)=>{
+    const {id}=req.body
+    try {
+        //console.log(id)
+        const d= await subscriptionService.deleteSubscription(id)
+        //console.log(d)
+        return res.status(200).json({ isOK: d.acknowledged, message: "Subscription Deleted Successfully !" })
+    } catch (e) {
+        return res.status(400).json({
+            message:e.message
+        })
+    }
+}
 export const updateSubscription = async (req, res) => {
     const data = req.body;
     //console.log(data)

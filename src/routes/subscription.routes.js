@@ -5,6 +5,7 @@ const router=Router()
 
 router.post('/',verifyAdmin, subscriptionController.createSubscription)  
 router.patch('/',verifyAdmin, subscriptionController.updateSubscription)  
+router.delete('/',verifyAdmin, subscriptionController.deleteSubscription)  
 router.get('/', subscriptionController.getSubscription)  
 
 export default router
