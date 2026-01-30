@@ -12,6 +12,9 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.978.0",
+    "@aws-sdk/lib-storage": "^3.978.0",
+    "@aws-sdk/s3-request-presigner": "^3.978.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -20,8 +23,10 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
     "node-cache": "^5.1.2",
     "nodemon": "^3.1.11",
+    "uuid": "^13.0.0",
     "winston": "^3.19.0"
   }
 }
