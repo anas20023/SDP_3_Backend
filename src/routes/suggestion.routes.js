@@ -54,7 +54,7 @@ const router = Router();
  *       401:
  *         description: Unauthorized
  */
-router.post('/', verifyToken, upload.single('attachment'), SuggestionController.createSuggestion);
+router.post('/', verifyToken, upload.single('file'), SuggestionController.createSuggestion);
 
 /**
  * @swagger

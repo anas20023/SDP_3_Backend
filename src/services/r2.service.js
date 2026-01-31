@@ -14,7 +14,8 @@ export { R2_PUBLIC_URL };
 export const uploadFile = async (file) => {
     const fileExtension = path.extname(file.originalname);
     const fileName = `${uuidv4()}${fileExtension}`;
-
+    //console.log(fileName)
+    //console.log(fileExtension)
     const command = new PutObjectCommand({
         Bucket: R2_BUCKET,
         Key: fileName,

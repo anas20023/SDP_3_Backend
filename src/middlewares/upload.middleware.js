@@ -1,31 +1,62 @@
-import multer from 'multer';
+import multer from "multer";
+import path from "path";
 
-// Configure multer for memory storage
+// Memory storage
 const storage = multer.memoryStorage();
 
-// File filter (optional, but good practice per "Best Practices")
-const fileFilter = (req, file, cb) => {
-    // optimize for common document/image types
-    const allowedTypes = [
-        'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-        'application/pdf',
-        'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // doc, docx
-        'text/plain'
-    ];
+// Allowed MIME types
+const allowedMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+  "application/octet-stream" // 👈 fallback for Apidog
+];
 
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error('Invalid file type. Allowed: Images, PDF, DOC, DOCX, TXT'), false);
-    }
+// Allowed file extensions
+const allowedExtensions = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".webp",
+  ".pdf",
+  ".doc",
+  ".docx",
+  ".txt"
+];
+
+const fileFilter = (req, file, cb) => {
+  const ext = path.extname(file.originalname).toLowerCase();
+  console.log(ext)
+  const mime = file.mimetype;
+  console.log(mime)
+
+  const isMimeAllowed = allowedMimeTypes.includes(mime);
+  const isExtAllowed = allowedExtensions.includes(ext);
+
+  if (isMimeAllowed && isExtAllowed) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Invalid file type. Allowed: Images, PDF, DOC, DOCX, TXT"
+      ),
+      false
+    );
+  }
 };
 
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 10 * 1024 * 1024, // 5MB limit
-    },
-    fileFilter: fileFilter
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB (comment was wrong before)
+  },
+  fileFilter
 });
 
 export default upload;
