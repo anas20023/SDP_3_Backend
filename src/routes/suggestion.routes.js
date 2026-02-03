@@ -30,20 +30,12 @@ const router = Router();
  *         multipart/form-data:
  *           schema:
  *             type: object
- *             required: [course_code, course_name, dept, exam_type]
+ *             required: [data]
  *             properties:
- *               course_code:
+ *               data:
  *                 type: string
- *               course_name:
- *                 type: string
- *               dept:
- *                 type: string
- *               exam_type:
- *                 type: string
- *                 enum: [Midterm, Final]
- *               description:
- *                 type: string
- *               attachment:
+ *                 description: 'JSON string containing course_code, course_name, dept, exam_type, description, etc.'
+ *               file:
  *                 type: string
  *                 format: binary
  *     responses:

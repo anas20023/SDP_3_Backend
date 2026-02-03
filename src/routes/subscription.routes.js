@@ -72,6 +72,16 @@ router.patch('/', verifyAdmin, subscriptionController.updateSubscription)
  *     tags: [Subscriptions]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [id]
+ *             properties:
+ *               id:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Subscription deleted successfully
