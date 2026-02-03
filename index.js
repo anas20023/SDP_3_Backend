@@ -19,6 +19,12 @@ app.use(morganMiddleware)
 
 app.use('/api', router)
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './src/config/swagger.js';
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 app.listen(PORT, () => {
    Logger.info(`Backend running on port ${PORT}`)
 })
