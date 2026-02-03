@@ -9,7 +9,7 @@ const createSuggestion = async (userId, suggestionData, file) => {
     }
     // console.log(m_data)
     const m_data=JSON.parse(suggestionData)
-    //console.log(m_data)
+    //console.log(m_data) // checking main branch push
     const suggestion = new Suggestion({
         course_code: m_data.course_code,
         course_name: m_data.course_name,
