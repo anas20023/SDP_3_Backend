@@ -56,7 +56,7 @@ export const handleLogout = (req, res) => {
 
 export const handleProfile = async (req, res) => {
     // console.log(req.user)
-    const user = req.user.user_id
+    const user = req.user.id
     try {
         const data = await AuthService.findData(user);
         res.status(200).json(data)
