@@ -20,43 +20,40 @@ export const handleRegister = async (req, res) => {
 }
 
 export const handleLogin = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' });
+    }
+
     try {
-        const { email, password } = req.body;
+        const { token } = await AuthService.login(email, password);
 
-        if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
-        }
-
-        const { user, token } = await AuthService.login(email, password);
-
-        res.setHeader('Set-Cookie', token, {
+        res.cookie('auth_token', token, {
             httpOnly: true,
             sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 30,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 1000 * 60 * 60 * 24 * 30,
             path: '/',
         });
-        res.status(200).json({
-            message: "Login successful"
-        });
+
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-        console.error("Login Error:", error);
-        res.status(401).json({ message: error.message });
+        console.error('Login failed:', error);
+        res.status(401).json({ message: 'Invalid email or password' });
     }
-}
+};
 
 export const handleLogout = (req, res) => {
-    try {
-        //console.log(req.user);   
-        res.setHeader('Set-Cookie', '', {
-            httpOnly: true,
-            maxAge: 0
-        });
-        res.status(200).json({ message: "Logout successful" });
-    } catch (error) {
-        console.error("Logout Error:", error);
-        res.status(500).json({ message: error.message });
-    }
-}
+    res.clearCookie('auth_token', {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: true,
+    });
+
+    res.status(200).json({ message: 'Logout successful' });
+};
+
 export const handleProfile = async (req, res) => {
     // console.log(req.user)
     const user = req.user.user_id

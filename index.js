@@ -7,6 +7,8 @@ import router from './src/routes/index.js'
 import connectDB from './src/config/db.js'
 import Logger from './src/services/logger.service.js'
 import morganMiddleware from './src/middlewares/logger.middleware.js'
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './src/config/swagger.js';
 const app = express()
 configDotenv()
 connectDB();
@@ -19,8 +21,7 @@ app.use(morganMiddleware)
 
 app.use('/api', router)
 
-import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './src/config/swagger.js';
+
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

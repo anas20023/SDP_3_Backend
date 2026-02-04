@@ -1,5 +1,6 @@
 import { Router } from "express";
-import verifyAdmin from '../middlewares/auth.middleware.js';
+import verifyToken from '../middlewares/auth.middleware.js';
+import  requireRole  from "../middlewares/requireRole.middleware.js";
 import * as subscriptionController from '../controllers/subscription.controller.js'
 const router = Router()
 
@@ -36,7 +37,7 @@ const router = Router()
  *       401:
  *         description: Unauthorized
  */
-router.post('/', verifyAdmin, subscriptionController.createSubscription)
+router.post('/', verifyToken, requireRole('admin'),subscriptionController.createSubscription)
 
 /**
  * @swagger
@@ -62,7 +63,7 @@ router.post('/', verifyAdmin, subscriptionController.createSubscription)
  *       401:
  *         description: Unauthorized
  */
-router.patch('/', verifyAdmin, subscriptionController.updateSubscription)
+router.patch('/', verifyToken, subscriptionController.updateSubscription)
 
 /**
  * @swagger
@@ -88,7 +89,7 @@ router.patch('/', verifyAdmin, subscriptionController.updateSubscription)
  *       401:
  *         description: Unauthorized
  */
-router.delete('/', verifyAdmin, subscriptionController.deleteSubscription)
+router.delete('/', verifyToken, subscriptionController.deleteSubscription)
 
 /**
  * @swagger

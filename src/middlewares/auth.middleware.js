@@ -1,21 +1,28 @@
 import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
-    const token =
-        req.cookies.token;
+    const token = req.cookies?.auth_token;
 
     if (!token) {
-        return res.status(403).json({ message: 'A token is required for authentication' });
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    if (!process.env.JWT_SECRET) {
+        throw new Error('JWT_SECRET is not configured');
     }
 
     try {
-        const bearer = token.startsWith('Bearer ') ? token.slice(7, token.length) : token;
-        //console.log(bearer)
-        const decoded = jwt.verify(bearer, process.env.JWT_SECRET || 'your_jwt_secret_key'); // Fallback for dev
-        req.user = decoded;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(decoded)
+        req.user = {
+            id: decoded.sub,
+            role: decoded.role,
+        };
+
+        next();
     } catch (err) {
-        return res.status(401).json({ message: 'Invalid Token' });
+        return res.status(401).json({ message: 'Invalid or expired token' });
     }
-    return next();
 };
+
 export default verifyToken;
