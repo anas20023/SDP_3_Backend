@@ -29,9 +29,11 @@ export const handleLogin = async (req, res) => {
 
         const { user, token } = await AuthService.login(email, password);
 
-        res.cookie('token', token, {
+        res.setHeader('Set-Cookie', token, {
             httpOnly: true,
-            sameSite: 'strict'
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 30,
+            path: '/',
         });
         res.status(200).json({
             message: "Login successful"
@@ -45,7 +47,7 @@ export const handleLogin = async (req, res) => {
 export const handleLogout = (req, res) => {
     try {
         //console.log(req.user);   
-        res.cookie('token', '', {
+        res.setHeader('Set-Cookie', '', {
             httpOnly: true,
             maxAge: 0
         });
@@ -55,16 +57,16 @@ export const handleLogout = (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-export const handleProfile= async(req,res)=>{
+export const handleProfile = async (req, res) => {
     // console.log(req.user)
-    const user=req.user.user_id
-   try {
-     const data= await AuthService.findData(user);
-    res.status(200).json(data)
-   } catch (e) {
-    res.status(400).json({
-        "message":e.message
-    })
-   }
+    const user = req.user.user_id
+    try {
+        const data = await AuthService.findData(user);
+        res.status(200).json(data)
+    } catch (e) {
+        res.status(400).json({
+            "message": e.message
+        })
+    }
     // console.log(user)
 }
