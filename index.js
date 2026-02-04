@@ -16,7 +16,10 @@ const PORT = process.env.PORT | 3000
 
 app.use(bodyParser.json()) 
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+   origin:true,
+   credentials:true
+}))
 app.use(morganMiddleware)
 
 app.use('/api', router)

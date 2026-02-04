@@ -31,8 +31,7 @@ export const handleLogin = async (req, res) => {
 
         res.cookie('auth_token', token, {
             httpOnly: true,
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'none',
             maxAge: 1000 * 60 * 60 * 24 * 30,
             path: '/',
         });
