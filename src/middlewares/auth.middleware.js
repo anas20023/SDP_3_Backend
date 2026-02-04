@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
     const token = req.cookies?.auth_token;
+    //console.log(token)
 
     if (!token) {
         return res.status(401).json({ message: 'Authentication required' });
@@ -15,7 +16,7 @@ const verifyToken = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log(decoded)
         req.user = {
-            id: decoded.sub,
+            id: decoded.user_id,
             role: decoded.role,
         };
 
