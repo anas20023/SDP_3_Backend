@@ -12,7 +12,7 @@ configDotenv()
 connectDB();
 const PORT = process.env.PORT | 3000
 
-app.use(bodyParser.json())
+app.use(bodyParser.json()) 
 app.use(cookieParser())
 app.use(cors())
 app.use(morganMiddleware)
