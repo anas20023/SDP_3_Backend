@@ -32,9 +32,9 @@ const allowedExtensions = [
 
 const fileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
-  console.log(ext)
+  //console.log(ext)
   const mime = file.mimetype;
-  console.log(mime)
+  //console.log(mime)
 
   const isMimeAllowed = allowedMimeTypes.includes(mime);
   const isExtAllowed = allowedExtensions.includes(ext);

@@ -21,7 +21,7 @@ const createSuggestion = async (userId, suggestionData, file) => {
         uploaded_by: userId,
         attachment_url
     });
-    //console.log(suggestion)
+    //console.log(suggestion) 
     await suggestion.save();
     return suggestion;
 };
