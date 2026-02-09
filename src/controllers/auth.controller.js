@@ -104,6 +104,20 @@ export const handleLogin = async (req, res) => {
             message: 'Email and password are required'
         });
     }
+     /* Email Validation */
+    if (!emailRegex.test(email)) {
+        return res.status(422).json({
+            message: 'Invalid email address'
+        });
+    }
+
+    /* Password Validation */
+    if (!passwordRegex.test(password)) {
+        return res.status(422).json({
+            message:
+                'Password must be at least 8 characters long and contain uppercase, lowercase, digit, and special character'
+        });
+    }
 
     try {
         const { token } = await AuthService.login(email, password);
