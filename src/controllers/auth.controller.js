@@ -1,9 +1,11 @@
 import AuthService from '../services/auth.service.js';
+import { checkStudentID } from '../services/checkStudentID.service.js';
 import {
     AUTH_COOKIE_NAME,
     AUTH_COOKIE_OPTIONS
 } from '../config/auth.config.js';
-
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/; 
 /**
  * Register a new user
  * POST /api/auth/register
@@ -19,30 +21,49 @@ export const handleRegister = async (req, res) => {
         section
     } = req.body;
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    
-    // Input Check from Client Side
-
-    if (!name || !email || !password) {
+    /* 1. Required Fields Check */
+    if (!name || !email || !password || !user_id || !dept || !intake || !section) {
         return res.status(400).json({
             message: 'Required fields are missing'
         });
     }
-    // console.log(emailRegex.test(email))
-    if(!(passwordRegex.test(password))){
-        return res.status(400).json({
-            message:"Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
-        })
+
+    /* 2. Email Validation */
+    if (!emailRegex.test(email)) {
+        return res.status(422).json({
+            message: 'Invalid email address'
+        });
     }
-    if(!(emailRegex.test(email))){
-        return res.status(400).json({
-            message:"Invalid Email address"
-        })
+
+    /* 3. Password Validation */
+    if (!passwordRegex.test(password)) {
+        return res.status(422).json({
+            message:
+                'Password must be at least 8 characters long and contain uppercase, lowercase, digit, and special character'
+        });
     }
 
     try {
-        /*await AuthService.register({
+        /* 4. Student ID Verification */
+        const serverData = await checkStudentID(user_id, intake);
+
+        if (!serverData) {
+            return res.status(404).json({
+                message: 'Student record not found'
+            });
+        }
+
+        const normalizedClientName = name.trim().toLowerCase();
+        const normalizedServerName = serverData.sis_std_name.trim().toLowerCase();
+
+        if (normalizedClientName !== normalizedServerName) {
+            return res.status(403).json({
+                message: 'Student name does not match official records'
+            });
+        }
+
+        /* 5. Register User */
+        await AuthService.register({
             name,
             user_id,
             email,
@@ -55,24 +76,18 @@ export const handleRegister = async (req, res) => {
         return res.status(201).json({
             message: 'User registered successfully'
         });
-        */
-    //    console.log("Oh NO!!")
-    return res.status(201).json({
-        message:"Oh Noooo!!!"
-    })
 
     } catch (error) {
         console.error('Register Error:', error);
 
-        // Example of controlled error mapping
         if (error.code === 'USER_EXISTS') {
             return res.status(409).json({
                 message: 'User already exists'
             });
         }
 
-        return res.status(400).json({
-            message: 'Registration failed'
+        return res.status(500).json({
+            message: error.message || 'Registration failed'
         });
     }
 };
