@@ -1,5 +1,6 @@
 import express from 'express'
 import { configDotenv } from 'dotenv'
+import dns from 'dns'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -9,6 +10,8 @@ import Logger from './src/services/logger.service.js'
 import morganMiddleware from './src/middlewares/logger.middleware.js'
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './src/config/swagger.js';
+const resolver= new dns.Resolver()
+resolver.getServers(['8.8.8.8', '8.8.4.4']) 
 const app = express()
 configDotenv()
 connectDB();
