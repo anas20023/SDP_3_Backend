@@ -3,7 +3,7 @@ import { uploadFile, deleteFile, getSignedFileUrl, R2_PUBLIC_URL } from './r2.se
 
 const createSuggestion = async (userId, suggestionData, file) => {
     let attachment_url = null;
-
+    console.log(userId)
     if (file) {
         attachment_url = await uploadFile(file);
     }
@@ -108,7 +108,7 @@ const updateSuggestion = async (userId, suggestionId, updateData, file) => {
     return suggestion;
 };
 
-const deleteSuggestion = async (userId, suggestionId) => {
+const deleteSuggestion = async (suggestionId) => {
     const suggestion = await Suggestion.findById(suggestionId);
     if (!suggestion) throw new Error('Suggestion not found');
     //console.log(suggestion)
