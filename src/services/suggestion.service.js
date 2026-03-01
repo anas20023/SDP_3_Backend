@@ -29,7 +29,8 @@ const getAllSuggestions = async (filters = {}) => {
     let suggestions = await Suggestion.find(query)
         .populate('uploaded_by', 'name email')
         .sort({ createdAt: -1 })
-        .lean(); // Use lean to return plain JS objects for modification
+        .limit(filters.limit ? parseInt(filters.limit) : 0) // Add limit for pagination
+        .lean();
 
     // If bucket is private (assumed if R2_PUBLIC_URL is empty), generate signed URLs
     if (!R2_PUBLIC_URL) {

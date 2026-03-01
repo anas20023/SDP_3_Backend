@@ -12,7 +12,7 @@ export const createSuggestion = async (req, res) => {
 
 export const getAllSuggestions = async (req, res) => {
     try {
-        const suggestions = await SuggestionService.getAllSuggestionsNoFilter();
+        const suggestions = await SuggestionService.getAllSuggestions();
         res.status(200).json(suggestions);
     } catch (error) {
         res.status(500).json({ message: error.message });

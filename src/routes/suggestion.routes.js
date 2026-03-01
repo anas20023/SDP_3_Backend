@@ -159,7 +159,7 @@ router.get('/:id', verifyToken, SuggestionController.getSuggestionById);
  *       401:
  *         description: Unauthorized - Token missing or invalid
  */
-router.put('/:id', verifyToken, upload.single('attachment'), SuggestionController.updateSuggestion);
+router.put('/:id', verifyToken, upload.single('file'), SuggestionController.updateSuggestion);
 
 /**
  * @swagger
