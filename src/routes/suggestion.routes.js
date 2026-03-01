@@ -68,7 +68,7 @@ router.post('/', verifyToken, upload.single('file'), SuggestionController.create
  *       401:
  *         description: Unauthorized
  */
-router.get('/', verifyToken, SuggestionController.getAllSuggestions);
+router.get('/',  SuggestionController.getAllSuggestions);
 
 /**
  * @swagger
