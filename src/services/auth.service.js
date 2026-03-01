@@ -1,4 +1,5 @@
 import User from '../model/users.js';
+import Suggestion from '../model/suggestions.js'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -55,6 +56,12 @@ const findData = async (user) => {
     if (!res){
         throw new Error("User not Found")
     }
+    // console.log(res._id.toString())
+    const user_id=res._id.toString()
+    const uploadsByUser = await Suggestion.find({
+       uploaded_by:user_id
+    })
+    //console.log(uploadsByUser)
     const filtered_data={
         name:res.name,
         email:res.email,
@@ -62,6 +69,7 @@ const findData = async (user) => {
         dept:res.dept,
         intake:res.intake,
         section:res.section,
+        uploads:uploadsByUser,
         createdAt:res.createdAt
     }
     return filtered_data

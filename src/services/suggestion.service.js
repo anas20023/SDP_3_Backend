@@ -22,14 +22,14 @@ const createSuggestion = async (userId, body, file) => {
 
 const getAllSuggestions = async (filters = {}) => {
     // Basic filtering implementation
-    const query = {};
+    const query = { status: 'approved' };
     if (filters.dept) query.dept = filters.dept;
     if (filters.course_code) query.course_code = filters.course_code;
 
     let suggestions = await Suggestion.find(query)
         .populate('uploaded_by', 'name email')
         .sort({ createdAt: -1 })
-        .limit(filters.limit ? parseInt(filters.limit) : 0) // Add limit for pagination
+        .limit(filters.limit ? parseInt(filters.limit) : 10) // Add limit for pagination
         .lean();
 
     // If bucket is private (assumed if R2_PUBLIC_URL is empty), generate signed URLs
