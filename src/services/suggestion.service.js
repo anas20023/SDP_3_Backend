@@ -49,6 +49,23 @@ const getAllSuggestions = async (filters = {}) => {
 
     return suggestions;
 };
+const getAllSuggestionsNoFilter = async () => {
+    const suggestions = await Suggestion.find()
+        .populate('uploaded_by', 'name email')
+        .sort({ createdAt: -1 })
+        .lean();
+
+    if (!R2_PUBLIC_URL) {
+        return await Promise.all(suggestions.map(async (s) => {
+            if (s.attachment_url) {
+                s.attachment_url = await getSignedFileUrl(s.attachment_url);
+            }
+            return s;
+        }));
+    }
+
+    return suggestions;
+};
 
 const getSuggestionById = async (id) => {
     const suggestion = await Suggestion.findById(id).populate('uploaded_by', 'name email').lean();
@@ -112,5 +129,6 @@ export default {
     getAllSuggestions,
     getSuggestionById,
     updateSuggestion,
-    deleteSuggestion
+    deleteSuggestion,
+    getAllSuggestionsNoFilter
 };
