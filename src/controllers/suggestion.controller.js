@@ -55,3 +55,18 @@ export const deleteSuggestion = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+export const voteSuggestion = async (req, res) => {
+    try {
+        const suggestion = await SuggestionService.voteSuggestion(req.user.id, req.params.id);
+        res.status(200).json({
+            message: 'Vote recorded successfully',
+            stars: suggestion.stars
+        });
+    } catch (error) {
+        if (error.message.includes('already voted')) {
+            return res.status(400).json({ message: error.message });
+        }
+        res.status(500).json({ message: error.message });
+    }
+};

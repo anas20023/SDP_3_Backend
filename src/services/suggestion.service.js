@@ -128,11 +128,39 @@ const deleteSuggestion = async (suggestionId) => {
     return true;
 };
 
+const voteSuggestion = async (userId, suggestionId) => {
+    // Atomically update the suggestion:
+    // 1. Add user to votedBy array only if they are not already there
+    // 2. Increment stars count only if the user was added
+    const suggestion = await Suggestion.findOneAndUpdate(
+        {
+            _id: suggestionId,
+            votedBy: { $ne: userId } // Ensure user haven't voted yet
+        },
+        {
+            $addToSet: { votedBy: userId },
+            $inc: { stars: 1 }
+        },
+        { new: true }
+    );
+
+    if (!suggestion) {
+        // If findOneAndUpdate returns null, either suggestion doesn't exist 
+        // OR the user has already voted (failed the $ne constraint)
+        const exists = await Suggestion.findById(suggestionId);
+        if (!exists) throw new Error('Suggestion not found');
+        throw new Error('You have already voted for this suggestion');
+    }
+
+    return suggestion;
+};
+
 export default {
     createSuggestion,
     getAllSuggestions,
     getSuggestionById,
     updateSuggestion,
     deleteSuggestion,
-    getAllSuggestionsNoFilter
+    getAllSuggestionsNoFilter,
+    voteSuggestion
 };
