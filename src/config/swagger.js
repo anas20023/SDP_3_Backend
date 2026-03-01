@@ -119,6 +119,19 @@ const options = {
                             type: 'string',
                             description: 'User ID of the uploader',
                         },
+                        votedBy: {
+                            type: 'array',
+                            items: {
+                                type: 'string'
+                            },
+                            description: 'List of User IDs who voted for this suggestion',
+                        },
+                        status: {
+                            type: 'string',
+                            enum: ['approved', 'pending', 'reject'],
+                            default: 'pending',
+                            description: 'Status of the suggestion (Admin only can update)',
+                        },
                         createdAt: {
                             type: 'string',
                             format: 'date-time'

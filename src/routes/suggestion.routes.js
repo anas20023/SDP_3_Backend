@@ -21,6 +21,7 @@ const router = Router();
  * /suggestions:
  *   post:
  *     summary: Create a new suggestion
+ *     description: Authenticated users can create a new course suggestion. A file attachment can be included.
  *     tags: [Suggestions]
  *     security:
  *       - bearerAuth: []
@@ -40,11 +41,15 @@ const router = Router();
  *                 format: binary
  *     responses:
  *       201:
- *         description: Suggestion created successfully
+ *         description: Suggestion created successfully (Default status is 'pending')
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Suggestion'
  *       400:
- *         description: Bad request
+ *         description: Bad request - Missing required fields or invalid data
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - Token missing or invalid
  */
 router.post('/', verifyToken, upload.single('file'), SuggestionController.createSuggestion);
 
@@ -53,28 +58,26 @@ router.post('/', verifyToken, upload.single('file'), SuggestionController.create
  * /suggestions:
  *   get:
  *     summary: Get all suggestions
+ *     description: Retrieve a list of all course suggestions.
  *     tags: [Suggestions]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of suggestions
+ *         description: List of suggestions retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Suggestion'
- *       401:
- *         description: Unauthorized
  */
-router.get('/',  SuggestionController.getAllSuggestions);
+router.get('/', SuggestionController.getAllSuggestions);
 
 /**
  * @swagger
  * /suggestions/{id}:
  *   get:
  *     summary: Get a suggestion by ID
+ *     description: Retrieve detailed information about a specific suggestion by its ID.
  *     tags: [Suggestions]
  *     security:
  *       - bearerAuth: []
@@ -87,7 +90,7 @@ router.get('/',  SuggestionController.getAllSuggestions);
  *         description: Suggestion ID
  *     responses:
  *       200:
- *         description: Suggestion details
+ *         description: Suggestion details retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -95,7 +98,7 @@ router.get('/',  SuggestionController.getAllSuggestions);
  *       404:
  *         description: Suggestion not found
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - Token missing or invalid
  */
 router.get('/:id', verifyToken, SuggestionController.getSuggestionById);
 
@@ -104,6 +107,10 @@ router.get('/:id', verifyToken, SuggestionController.getSuggestionById);
  * /suggestions/{id}:
  *   put:
  *     summary: Update a suggestion
+ *     description: >
+ *       Update an existing suggestion. 
+ *       - Regular users can update their own suggestions (except status).
+ *       - Admins can update any suggestion and change its status.
  *     tags: [Suggestions]
  *     security:
  *       - bearerAuth: []
@@ -131,24 +138,76 @@ router.get('/:id', verifyToken, SuggestionController.getSuggestionById);
  *                 enum: [Midterm, Final]
  *               description:
  *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [approved, pending, reject]
+ *                 description: (Admin ONLY) The new status of the suggestion
  *               attachment:
  *                 type: string
  *                 format: binary
  *     responses:
  *       200:
  *         description: Suggestion updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Suggestion'
+ *       403:
+ *         description: Forbidden - Trying to update status as a regular user or updating someone else's suggestion
  *       404:
  *         description: Suggestion not found
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - Token missing or invalid
  */
 router.put('/:id', verifyToken, upload.single('attachment'), SuggestionController.updateSuggestion);
+
+/**
+ * @swagger
+ * /suggestions/{id}/vote:
+ *   post:
+ *     summary: Vote for a suggestion
+ *     description: >
+ *       Allows an authenticated user to star a suggestion. 
+ *       - Each user can vote only once per suggestion.
+ *       - Votes cannot be undone.
+ *       - Increment the stars count.
+ *     tags: [Suggestions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Suggestion ID
+ *     responses:
+ *       200:
+ *         description: Vote recorded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 stars:
+ *                   type: number
+ *       400:
+ *         description: Bad request - User has already voted
+ *       404:
+ *         description: Suggestion not found
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
+ */
+router.post('/:id/vote', verifyToken, SuggestionController.voteSuggestion);
 
 /**
  * @swagger
  * /suggestions/{id}:
  *   delete:
  *     summary: Delete a suggestion
+ *     description: Permanently delete a suggestion. Only the owner or an admin can delete a suggestion.
  *     tags: [Suggestions]
  *     security:
  *       - bearerAuth: []
@@ -165,7 +224,9 @@ router.put('/:id', verifyToken, upload.single('attachment'), SuggestionControlle
  *       404:
  *         description: Suggestion not found
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - Token missing or invalid
+ *       403:
+ *         description: Forbidden - Not authorized to delete this suggestion
  */
 router.delete('/:id', verifyToken, SuggestionController.deleteSuggestion);
 

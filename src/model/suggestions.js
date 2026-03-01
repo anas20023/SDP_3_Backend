@@ -62,6 +62,13 @@ const suggestionSchema = new mongoose.Schema(
             required: true
         },
 
+        votedBy: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+            }
+        ],
+
         status: {
             type: String,
             enum: ["approved", "pending", "reject"],
@@ -80,5 +87,6 @@ suggestionSchema.index({ dept: 1 });
 suggestionSchema.index({ exam_type: 1 });
 suggestionSchema.index({ uploaded_by: 1 });
 suggestionSchema.index({ status: 1 });
+suggestionSchema.index({ votedBy: 1 });
 
 export default mongoose.model("Suggestion", suggestionSchema);
