@@ -44,6 +44,7 @@ export const updateSuggestion = async (req, res) => {
 };
 
 export const deleteSuggestion = async (req, res) => {
+    console.log(req.user)
     try {
         await SuggestionService.deleteSuggestion(req.user.user_id, req.params.id);
         res.status(200).json({ message: 'Suggestion deleted successfully' });

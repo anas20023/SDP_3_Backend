@@ -111,10 +111,10 @@ const updateSuggestion = async (userId, suggestionId, updateData, file) => {
 const deleteSuggestion = async (userId, suggestionId) => {
     const suggestion = await Suggestion.findById(suggestionId);
     if (!suggestion) throw new Error('Suggestion not found');
-
-    if (suggestion.uploaded_by.toString() !== userId) {
-        throw new Error('Unauthorized to delete this suggestion');
-    }
+    //console.log(suggestion)
+    // if (suggestion.uploaded_by.toString() !== userId) {
+    //     throw new Error('Unauthorized to delete this suggestion');
+    // }
 
     if (suggestion.attachment_url) {
         await deleteFile(suggestion.attachment_url);
