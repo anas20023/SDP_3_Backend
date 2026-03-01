@@ -3,7 +3,7 @@ import SuggestionService from '../services/suggestion.service.js';
 export const createSuggestion = async (req, res) => {
     //console.log(req.body.data)
     try {
-        const suggestion = await SuggestionService.createSuggestion(req.user.id, req.body.data, req.file);
+        const suggestion = await SuggestionService.createSuggestion(req.user.id, req.body, req.file);
         res.status(201).json(suggestion);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -15,7 +15,7 @@ export const getAllSuggestions = async (req, res) => {
         const suggestions = await SuggestionService.getAllSuggestionsNoFilter();
         res.status(200).json(suggestions);
     } catch (error) {
-        res.status(500).json({ message: error.message }); 
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -33,7 +33,7 @@ export const getSuggestionById = async (req, res) => {
 
 export const updateSuggestion = async (req, res) => {
     try {
-        const suggestion = await SuggestionService.updateSuggestion(req.user.id, req.params.id, req.body, req.file);
+        const suggestion = await SuggestionService.updateSuggestion(req.user.id, req.user.role, req.params.id, req.body, req.file);
         res.status(200).json(suggestion);
     } catch (error) {
         if (error.message.includes('Unauthorized')) {
