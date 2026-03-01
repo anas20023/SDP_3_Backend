@@ -73,13 +73,23 @@ const getSuggestionById = async (id) => {
     return suggestion;
 };
 
-const updateSuggestion = async (userId, suggestionId, updateData, file) => {
+const updateSuggestion = async (userId, userRole, suggestionId, updateData, file) => {
     const suggestion = await Suggestion.findById(suggestionId);
     if (!suggestion) throw new Error('Suggestion not found');
 
     // Check ownership
-    if (suggestion.uploaded_by.toString() !== userId) {
+    const isOwner = suggestion.uploaded_by.toString() === userId;
+    const isAdmin = userRole === 'admin';
+
+    if (!isOwner && !isAdmin) {
         throw new Error('Unauthorized to update this suggestion');
+    }
+
+    // Role-based status update restriction
+    if (updateData.status && !isAdmin) {
+        // If not admin, ignore status update or throw error
+        // Let's throw error as per requirement "Admin will only have the access to do this"
+        throw new Error('Unauthorized to update suggestion status');
     }
 
     let attachment_url = suggestion.attachment_url;

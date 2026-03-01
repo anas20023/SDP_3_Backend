@@ -60,10 +60,16 @@ const suggestionSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true
+        },
+
+        status: {
+            type: String,
+            enum: ["approved", "pending", "reject"],
+            default: "pending"
         }
     },
     {
-        timestamps: true,   
+        timestamps: true,
         versionKey: false
     }
 );
@@ -73,5 +79,6 @@ suggestionSchema.index({ course_code: 1 });
 suggestionSchema.index({ dept: 1 });
 suggestionSchema.index({ exam_type: 1 });
 suggestionSchema.index({ uploaded_by: 1 });
+suggestionSchema.index({ status: 1 });
 
 export default mongoose.model("Suggestion", suggestionSchema);
