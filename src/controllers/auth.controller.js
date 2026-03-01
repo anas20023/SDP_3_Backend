@@ -53,14 +53,14 @@ export const handleRegister = async (req, res) => {
             });
         }
 
-        const normalizedClientName = name.trim().toLowerCase();
-        const normalizedServerName = serverData.sis_std_name.trim().toLowerCase();
+        // const normalizedClientName = name.trim().toLowerCase();
+        // const normalizedServerName = serverData.sis_std_name.trim().toLowerCase();
 
-        if (normalizedClientName !== normalizedServerName) {
-            return res.status(403).json({
-                message: 'Student name does not match official records'
-            });
-        }
+        // if (normalizedClientName !== normalizedServerName) {
+        //     return res.status(403).json({
+        //         message: 'Student name does not match official records'
+        //     });
+        // }
 
         /* 5. Register User */
         await AuthService.register({
