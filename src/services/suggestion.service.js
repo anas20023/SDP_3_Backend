@@ -1,27 +1,21 @@
 import Suggestion from '../model/suggestions.js';
 import { uploadFile, deleteFile, getSignedFileUrl, R2_PUBLIC_URL } from './r2.service.js';
 
-const createSuggestion = async (userId, suggestionData, file) => {
+const createSuggestion = async (userId, body, file) => {
+
+    //console.log(body)
     let attachment_url = null;
-    console.log(userId)
+
     if (file) {
         attachment_url = await uploadFile(file);
     }
-    // console.log(m_data)
-    const m_data=JSON.parse(suggestionData)
-    //console.log(m_data) // checking main branch push
+
     const suggestion = new Suggestion({
-        course_code: m_data.course_code,
-        course_name: m_data.course_name,
-        dept: m_data.dept,
-        intake: m_data.intake,
-        section: m_data.section,
-        exam_type: m_data.exam_type,
-        description: m_data.description,
+        ...body,            // ✅ directly usable
         uploaded_by: userId,
         attachment_url
     });
-    //console.log(suggestion) 
+
     await suggestion.save();
     return suggestion;
 };

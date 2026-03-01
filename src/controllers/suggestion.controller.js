@@ -3,7 +3,7 @@ import SuggestionService from '../services/suggestion.service.js';
 export const createSuggestion = async (req, res) => {
     //console.log(req.body.data)
     try {
-        const suggestion = await SuggestionService.createSuggestion(req.user.id, req.body.data, req.file);
+        const suggestion = await SuggestionService.createSuggestion(req.user.id, req.body, req.file);
         res.status(201).json(suggestion);
     } catch (error) {
         res.status(400).json({ message: error.message });
