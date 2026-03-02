@@ -63,7 +63,7 @@ router.post('/', verifyToken, requireRole('admin'),subscriptionController.create
  *       401:
  *         description: Unauthorized
  */
-router.patch('/', verifyToken, subscriptionController.updateSubscription)
+router.patch('/', verifyToken,requireRole('admin'), subscriptionController.updateSubscription)
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ router.patch('/', verifyToken, subscriptionController.updateSubscription)
  *       401:
  *         description: Unauthorized
  */
-router.delete('/', verifyToken, subscriptionController.deleteSubscription)
+router.delete('/', verifyToken,requireRole('admin'), subscriptionController.deleteSubscription)
 
 /**
  * @swagger
