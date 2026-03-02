@@ -133,6 +133,7 @@ const voteSuggestion = async (userId, suggestionId) => {
     // Atomically update the suggestion:
     // 1. Add user to votedBy array only if they are not already there
     // 2. Increment stars count only if the user was added
+    //console.log(userId,suggestionId)
     const suggestion = await Suggestion.findOneAndUpdate(
         {
             _id: suggestionId,
