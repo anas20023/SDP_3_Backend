@@ -120,7 +120,7 @@ export const handleLogin = async (req, res) => {
     }
 
     try {
-        const { token } = await AuthService.login(email, password);
+        const { user,token } = await AuthService.login(email, password);
 
         res.cookie(
             AUTH_COOKIE_NAME,
@@ -129,7 +129,8 @@ export const handleLogin = async (req, res) => {
         );
 
         return res.status(200).json({
-            message: 'Login successful'
+            message: 'Login successful',
+            role:user.role
         });
 
     } catch (error) {
