@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(cors({
    origin:'*',
-   credentials:false
+   credentials:true
 }))
 app.use(morganMiddleware)
 
