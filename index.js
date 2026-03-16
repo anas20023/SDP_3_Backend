@@ -19,10 +19,23 @@ const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.json()) 
 app.use(cookieParser())
-app.use(cors({
-   origin:'*',
-   credentials:true
-}))
+const corsOptions = {
+  origin: ['*','http://localhost:5173'], // allowed origin(s) (no trailing slash)
+  credentials: true, // This is crucial for allowing cookies/auth headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'Origin',
+    'Accept',
+    'X-Requested-With',
+    'Access-Control-Allow-Origin',
+    'Access-Control-Request-Method',
+    'Access-Control-Request-Headers'
+  ], // Specify allowed headers
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(morganMiddleware)
 
 app.use('/api', router)
