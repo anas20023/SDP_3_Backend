@@ -15,13 +15,13 @@ resolver.getServers(['8.8.8.8', '8.8.4.4'])
 const app = express()
 configDotenv()
 connectDB();
-const PORT = process.env.PORT | 3000
+const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.json()) 
 app.use(cookieParser())
 app.use(cors({
-   origin:true,
-   credentials:true
+   origin:'*',
+   credentials:false
 }))
 app.use(morganMiddleware)
 
