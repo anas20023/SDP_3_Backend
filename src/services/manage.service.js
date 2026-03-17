@@ -50,9 +50,12 @@ export const getAnalytics = async () => {
     return analytics
 }
 export const getsuggestionAnalysis = async () => {
+    const cachedData = cache.get("suggestion_analysis")
+    if (cachedData) {
+        return cachedData
+    }
     const res = await suggestions.find().select('status')
-    // console.log(res)
-    return [
+    const analysis = [
         {
             name:"pending",value: res.filter(item => item.status === 'pending').length,
         },
@@ -63,15 +66,24 @@ export const getsuggestionAnalysis = async () => {
            name: "rejected",value: res.filter(item => item.status === 'reject').length
         }
     ]
+    cache.set("suggestion_analysis", analysis)
+    return analysis
 }
 export const getstarAnalysis=async()=>{
+    const cachedData = cache.get("star_analysis")
+    if (cachedData) {
+        return cachedData
+    }
     const res=await suggestions.find().select('stars uploaded_by')
     const usersMap = new Map(await Users.find().select('_id name').then(users => users.map(u => [u._id.toString(), u.name])))
     
-    return res
+    const analysis = res
         .map(item => ({
             ...item.toObject(),
             uploaded_by: usersMap.get(item.uploaded_by.toString()) || 'Unknown'
         }))
         .sort((a, b) => b.stars - a.stars)
+    
+    cache.set("star_analysis", analysis)
+    return analysis
 }
