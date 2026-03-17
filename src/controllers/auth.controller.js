@@ -130,7 +130,12 @@ export const handleLogin = async (req, res) => {
 
         return res.status(200).json({
             message: 'Login successful',
-            role:user.role
+            name:user.name,
+            email:user.email,
+            dept:user.dept,
+            createdAt:user.createdAt,
+            intake:user.intake,
+            role:user.role 
         });
 
     } catch (error) {
