@@ -1,5 +1,6 @@
 import NodeCache from "node-cache"
 import Users from "../model/users.js"
+import suggestions from "../model/suggestions.js"
 const cache = new NodeCache({ stdTTL: 60 })
 export const getusers = async () => {
     const cachedUsers = cache.get("users")
@@ -10,7 +11,7 @@ export const getusers = async () => {
     cache.set("users", users)
     return users
 }
-export const getLast30DaysAnalytics = async () => {
+export const getAnalytics = async () => {
     const cachedData = cache.get("last_30_days")
     if (cachedData) {
         return cachedData
@@ -47,4 +48,19 @@ export const getLast30DaysAnalytics = async () => {
 
     cache.set("last_30_days", analytics)
     return analytics
+}
+export const getsuggestionAnalysis = async () => {
+    const res = await suggestions.find().select('status')
+    // console.log(res)
+    return [
+        {
+            name:"pending",value: res.filter(item => item.status === 'pending').length,
+        },
+        {
+            name: "approved",value: res.filter(item => item.status === 'approved').length,
+        },
+        {
+           name: "rejected",value: res.filter(item => item.status === 'reject').length
+        }
+    ]
 }
