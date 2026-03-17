@@ -64,3 +64,14 @@ export const getsuggestionAnalysis = async () => {
         }
     ]
 }
+export const getstarAnalysis=async()=>{
+    const res=await suggestions.find().select('stars uploaded_by')
+    const usersMap = new Map(await Users.find().select('_id name').then(users => users.map(u => [u._id.toString(), u.name])))
+    
+    return res
+        .map(item => ({
+            ...item.toObject(),
+            uploaded_by: usersMap.get(item.uploaded_by.toString()) || 'Unknown'
+        }))
+        .sort((a, b) => b.stars - a.stars)
+}
