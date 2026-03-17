@@ -82,7 +82,7 @@ export const getstarAnalysis=async()=>{
             ...item.toObject(),
             uploaded_by: usersMap.get(item.uploaded_by.toString()) || 'Unknown'
         }))
-        .sort((a, b) => b.stars - a.stars)
+        .sort((a, b) => a.stars - b.stars)
     
     cache.set("star_analysis", analysis)
     return analysis
