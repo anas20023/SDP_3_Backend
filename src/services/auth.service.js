@@ -69,7 +69,6 @@ const findData = async (user) => {
         dept:res.dept,
         intake:res.intake,
         section:res.section,
-        uploads:uploadsByUser,
         createdAt:res.createdAt
     }
     return filtered_data
