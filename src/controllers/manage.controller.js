@@ -53,6 +53,7 @@ export const updateSuggestion = async (req, res) => {
         // We can reuse SuggestionService here if we want full file handling
         // But for consistency with manage.routes, let's use manageService
         const updated = await manageService.updateSuggestionAdmin(req.user.id, req.user.role, id, req.body, req.file)
+        //console.log(updated);
         return res.status(200).json(updated)
     } catch (error) {
         return res.status(400).json({ message: error.message })
