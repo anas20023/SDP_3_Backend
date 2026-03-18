@@ -16,7 +16,7 @@ export const getanalytics=async (req,res)=>{
         const suggestionAnalysis= await manageService.getsuggestionAnalysis()
         const starAnalysis=await manageService.getstarAnalysis()
        // console.log(starAnalysis)
-        res.set("Cache-Control", "public, max-age=60")
+        res.set("Cache-Control", "public, max-age=10")
         return res.status(200).json({userAnalytics,suggestionAnalysis,starAnalysis})
     } catch (error) {
         return res.status(404).json({
