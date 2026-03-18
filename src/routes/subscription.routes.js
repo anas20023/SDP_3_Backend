@@ -37,7 +37,7 @@ const router = Router()
  *       401:
  *         description: Unauthorized
  */
-router.post('/', verifyToken, requireRole('admin'),subscriptionController.createSubscription)
+router.post('/', verifyToken, requireRole(['admin']),subscriptionController.createSubscription)
 
 /**
  * @swagger
@@ -63,7 +63,7 @@ router.post('/', verifyToken, requireRole('admin'),subscriptionController.create
  *       401:
  *         description: Unauthorized
  */
-router.patch('/', verifyToken,requireRole('admin'), subscriptionController.updateSubscription)
+router.patch('/:id', verifyToken, requireRole(['admin']), subscriptionController.updateSubscription)
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ router.patch('/', verifyToken,requireRole('admin'), subscriptionController.updat
  *       401:
  *         description: Unauthorized
  */
-router.delete('/', verifyToken,requireRole('admin'), subscriptionController.deleteSubscription)
+router.delete('/', verifyToken,requireRole(['admin']), subscriptionController.deleteSubscription)
 
 /**
  * @swagger

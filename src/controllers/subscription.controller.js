@@ -10,31 +10,38 @@ export const createSubscription = async (req, res) => {
         })
     }
 }
-export const deleteSubscription= async(req,res)=>{
-    const {id}=req.body
+export const deleteSubscription = async (req, res) => {
+    const { id } = req.body
     try {
         //console.log(id)
-        const d= await subscriptionService.deleteSubscription(id)
+        const d = await subscriptionService.deleteSubscription(id)
         //console.log(d)
         return res.status(200).json({ isOK: d.acknowledged, message: "Subscription Deleted Successfully !" })
     } catch (e) {
         return res.status(400).json({
-            message:e.message
-        })
-    }
-}
-export const updateSubscription = async (req, res) => {
-    const data = req.body;
-    //console.log(data)
-    try {
-        const ress = await subscriptionService.updateSubscription(data);
-        return res.status(200).json({ isOK: ress.acknowledged, message: "Subscription Updates Successfully !" })
-    } catch (e) {
-        return res.status(304).json({
             message: e.message
         })
     }
 }
+export const updateSubscription = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await subscriptionService.updateSubscription({
+            id,
+            ...req.body,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Subscription updated successfully",
+        });
+    } catch (e) {
+        res.status(500).json({
+            message: e.message,
+        });
+    }
+};
 export const getSubscription = async (req, res) => {
     try {
         const data = await subscriptionService.getSubscription();
