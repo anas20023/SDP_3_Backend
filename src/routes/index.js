@@ -2,6 +2,7 @@ import { Router } from "express";
 import authroute from './auth.routes.js'
 import suggestionRoutes from './suggestion.routes.js'
 import subscriptionRoute from './subscription.routes.js'
+import feedbackRoutes from './feedback.routes.js'
 import manageRoutes from './manage.routes.js'
 const router = Router()
 
@@ -15,5 +16,6 @@ router.get('/', (req, res) => {
 router.use('/auth', authroute);
 router.use('/manage',manageRoutes)
 router.use('/suggestions', suggestionRoutes);
+router.use('/feedback', feedbackRoutes);
 router.use('/subsc', subscriptionRoute);
 export default router
