@@ -89,18 +89,18 @@ export const getstarAnalysis = async () => {
     return analysis
 }
 export const getsuggestions = async (id = "") => {
-    const cachedData = cache.get(`suggestions_${id}`)
-    if (cachedData) {
-        return cachedData
-    }
+    // const cachedData = cache.get(`suggestions_${id}`)
+    // if (cachedData) {
+    //     return cachedData
+    // }
     let res
     if (!id) {
         res = await suggestions.find()
-        cache.set(`suggestions_${id}`, res)
+        // cache.set(`suggestions_${id}`, res)
 
     } else {
         res = await suggestions.find({ uploaded_by: id })
-        cache.set(`suggestions_${id}`, res)
+        // cache.set(`suggestions_${id}`, res)
 
     }
     return res

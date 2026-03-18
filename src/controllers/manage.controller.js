@@ -27,7 +27,7 @@ export const getanalytics=async (req,res)=>{
 export const getsuggestions = async (req, res) => {
     try {
         const suggestions = await manageService.getsuggestions()
-        res.set("Cache-Control", "public, max-age=60")
+        //res.set("Cache-Control", "public, max-age=60")
         return res.status(200).json(suggestions)
     } catch (error) {
         return res.status(404).json({
