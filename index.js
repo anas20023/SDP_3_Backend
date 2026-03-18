@@ -22,7 +22,7 @@ app.use(cookieParser())
 const corsOptions = {
   origin: ['*','https://sdp-3-admin-dashboard.vercel.app','http://localhost:5173'], // allowed origin(s) (no trailing slash)
   credentials: true, // This is crucial for allowing cookies/auth headers
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'], // Specify allowed methods
   allowedHeaders: [
     'Content-Type',
     'Authorization',
