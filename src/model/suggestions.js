@@ -52,7 +52,6 @@ const suggestionSchema = new mongoose.Schema(
         stars: {
             type: Number,
             min: 0,
-            max: 5,
             default: 0
         },
 
