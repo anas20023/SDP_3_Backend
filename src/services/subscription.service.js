@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
 import SubscriptionPlan from "../model/subscriptionPlan.js";
 import subscriptionPlan from "../model/subscriptionPlan.js";
-const subscription_cache = new NodeCache({ checkperiod: 600 })
+const subscription_cache = new NodeCache({ checkperiod: 60 })
 
 export const createSubscription = async (data) => {
     const {
