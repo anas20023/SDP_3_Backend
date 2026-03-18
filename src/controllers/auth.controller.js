@@ -5,7 +5,7 @@ import {
     AUTH_COOKIE_OPTIONS
 } from '../config/auth.config.js';
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/; 
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 /**
  * Register a new user
  * POST /api/auth/register
@@ -104,7 +104,7 @@ export const handleLogin = async (req, res) => {
             message: 'Email and password are required'
         });
     }
-     /* Email Validation */
+    /* Email Validation */
     if (!emailRegex.test(email)) {
         return res.status(422).json({
             message: 'Invalid email address'
@@ -120,7 +120,7 @@ export const handleLogin = async (req, res) => {
     }
 
     try {
-        const { user,token } = await AuthService.login(email, password);
+        const { user, token } = await AuthService.login(email, password);
 
         res.cookie(
             AUTH_COOKIE_NAME,
@@ -130,12 +130,12 @@ export const handleLogin = async (req, res) => {
 
         return res.status(200).json({
             message: 'Login successful',
-            name:user.name,
-            email:user.email,
-            dept:user.dept,
-            createdAt:user.createdAt,
-            intake:user.intake,
-            role:user.role 
+            name: user.name,
+            email: user.email,
+            dept: user.dept,
+            createdAt: user.createdAt,
+            intake: user.intake,
+            role: user.role
         });
 
     } catch (error) {
@@ -161,7 +161,6 @@ export const handleLogout = (req, res) => {
         message: 'Logout successful'
     });
 };
-
 /**
  * Get authenticated user profile
  * GET /api/auth/profile
@@ -178,11 +177,19 @@ export const handleProfile = async (req, res) => {
 
     try {
         const profile = await AuthService.findData(userId);
-
+        if (profile.role !== req.user.role) {
+            res.clearCookie(
+                AUTH_COOKIE_NAME,
+                AUTH_COOKIE_OPTIONS
+            );
+            throw new Error("Unauthorized to Access")
+        }
+        // console.log(req.user.role)
+        // console.log(profile.role)
         return res.status(200).json(profile);
 
     } catch (error) {
-        console.error('Profile Error:', error);
+        //console.error('Profile Error:', error);
 
         return res.status(500).json({
             message: 'Failed to fetch profile'
