@@ -79,7 +79,7 @@ export const deleteSubscription = async (id) => {
     return data
 }
 export const getSubscription = async () => {
-    const subs = await SubscriptionPlan.find({}, "-createdAt -updatedAt");
+    const subs = await SubscriptionPlan.find().select("-createdAt -updatedAt");
     if (!subs) {
         throw new Error("No Subscription Found!")
     }
