@@ -25,16 +25,16 @@ export const deleteSubscription = async (req, res) => {
 }
 export const updateSubscription = async (req, res) => {
     const { id } = req.params;
-
+    //console.log(id,req.body)
     try {
         const result = await subscriptionService.updateSubscription({
             id,
             ...req.body,
         });
-
         res.status(200).json({
             success: true,
             message: "Subscription updated successfully",
+            data:result
         });
     } catch (e) {
         res.status(500).json({

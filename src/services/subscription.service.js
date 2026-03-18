@@ -1,8 +1,5 @@
-import NodeCache from "node-cache";
+import mongoose from "mongoose";
 import SubscriptionPlan from "../model/subscriptionPlan.js";
-import subscriptionPlan from "../model/subscriptionPlan.js";
-const subscription_cache = new NodeCache({ checkperiod: 60 })
-
 export const createSubscription = async (data) => {
     const {
         name,
@@ -38,11 +35,11 @@ export const createSubscription = async (data) => {
         features,
         isActive
     });
-    subscription_cache.del("subscription_data")
     return plan;
 };
 export const updateSubscription = async ({ id, ...updateData }) => {
     // Validate ID existence
+    //console.log(id, updateData)
     if (!id) {
         throw new Error("Subscription ID is required");
     }
@@ -68,40 +65,24 @@ export const updateSubscription = async ({ id, ...updateData }) => {
     if (!updatedSubscription) {
         throw new Error("Subscription plan not found");
     }
-
-    // Invalidate cache
-    await subscription_cache.del("subscription_data");
-
-    return {
-        success: true,
-        message: "Subscription plan updated successfully",
-        data: updatedSubscription
-    };
+    return updatedSubscription
 };
 export const deleteSubscription = async (id) => {
     // return id
-    const data = await subscriptionPlan.deleteOne({
+    const data = await SubscriptionPlan.deleteOne({
         _id: id
     })
     //console.log(data)
     if (!data.deletedCount) {
         throw new Error("Unable to Delete Subscription Plan")
     }
-    subscription_cache.del("subscription_data")
     return data
 }
 export const getSubscription = async () => {
-    const cachehit = subscription_cache.get("subscription_data")
-    if (!cachehit) {
-        //console.log("Cache Miss")
-
-        const subs = await SubscriptionPlan.find({}, "-createdAt -updatedAt");
-        if (!subs) {
-            throw new Error("No Subscription Found!")
-        }
-        subscription_cache.set("subscription_data", subs, 1000)
-        return subs
+    const subs = await SubscriptionPlan.find({}, "-createdAt -updatedAt");
+    if (!subs) {
+        throw new Error("No Subscription Found!")
     }
-    return cachehit
+    return subs
 }
 
