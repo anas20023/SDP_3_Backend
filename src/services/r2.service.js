@@ -31,14 +31,8 @@ export const uploadFile = async (file) => {
         return `${R2_PUBLIC_URL}/${fileName}`;
     }
 
-    // Otherwise return the key (controller logic might decide to sign it or not)
-    // But requirement says "Store only the file URL". 
-    // We will assume R2_PUBLIC_URL is set for public access, 
-    // or we construct a default r2 dev URL if not? 
-    // Actually, usually R2 has a public domain. If not, it's private.
-    // Let's stick to returning a URL-like structure or just the key if no public URL?
-    // User context: "R2_PUBLIC_URL" is in env.
-    return `${R2_PUBLIC_URL}/${fileName}`;
+    // Otherwise return the key
+    return fileName;
 };
 
 /**

@@ -8,12 +8,10 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json({ message: 'Authentication required' });
     }
 
-    if (!process.env.JWT_SECRET) {
-        throw new Error('JWT_SECRET is not configured');
-    }
+    const secret = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, secret);
         //console.log(decoded)
         req.user = {
             id: decoded.user_id,

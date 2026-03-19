@@ -23,7 +23,12 @@ export const getAnalytics = async () => {
     const thirtyDaysAgo = new Date(today)
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-    const users = await Users.find({ createdAt: { $gte: thirtyDaysAgo } }).select('-passwordHash')
+    const users = await Users.find({ 
+        $or: [
+            { createdAt: { $gte: thirtyDaysAgo } },
+            { updatedAt: { $gte: thirtyDaysAgo } }
+        ]
+    }).select('-passwordHash')
 
     const analytics = Array.from({ length: 32 }, (_, i) => {
         const dayStart = new Date(thirtyDaysAgo)
