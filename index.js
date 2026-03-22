@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3000
 app.use(bodyParser.json()) 
 app.use(cookieParser())
 const corsOptions = {
-  origin: ['https://sdp3.alpha.dpdns.org','https://sdp-3-admin-dashboard.vercel.app','http://localhost:5173'], // allowed origin(s) (no trailing slash)
+  origin: ['https://sdp3.alpha.dpdns.org','https://sdp-3-admin-dashboard.vercel.app','http://localhost:5173','http://localhost:8081'], // allowed origin(s) (no trailing slash)
   credentials: true, // This is crucial for allowing cookies/auth headers
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'], // Specify allowed methods
   allowedHeaders: [
