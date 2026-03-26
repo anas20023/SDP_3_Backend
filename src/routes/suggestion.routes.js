@@ -230,4 +230,9 @@ router.post('/:id/vote', verifyToken, SuggestionController.voteSuggestion);
  */
 router.delete('/:id', verifyToken, SuggestionController.deleteSuggestion);
 
+/*
+Analyzing using AI
+*/
+router.post('/ai',SuggestionController.getAiAnalysis)
+
 export default router;

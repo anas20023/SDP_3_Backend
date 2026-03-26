@@ -1,6 +1,6 @@
 import Suggestion from '../model/suggestions.js';
 import { uploadFile, deleteFile, getSignedFileUrl, R2_PUBLIC_URL } from './r2.service.js';
-
+import axios from 'axios';
 const createSuggestion = async (userId, body, file) => {
 
     //console.log(body)
@@ -156,6 +156,59 @@ const voteSuggestion = async (userId, suggestionId) => {
 
     return suggestion;
 };
+const analyzeData = async (id) => {
+    const data = await Suggestion.findById(id)
+        .select('course_name dept description attachment_url')
+
+    const prompt = `
+You are an assistant that explains academic content in a very simple way.
+
+Your task:
+Create a short, easy-to-understand summary for end users.
+
+Rules:
+- Use simple English (non-technical)
+- Maximum 3 sentences
+- Focus only on key idea
+- Ignore unnecessary details
+- Do NOT mention "_id" or database structure
+- If a URL is provided, just mention "attached resource" (do NOT analyze the link)
+
+Output format:
+Summary: <your answer>
+
+Data:
+Course: ${data.course_name}
+Department: ${data.dept}
+Description: ${data.description}
+Attachment: ${data.attachment_url}
+`
+
+    const response = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+            model: 'nvidia/nemotron-3-super-120b-a12b:free',
+            max_tokens: 200,
+            messages: [
+                {
+                    role: 'system',
+                    content: 'You simplify academic content for general users.'
+                },
+                {
+                    role: 'user',
+                    content: prompt
+                }
+            ]
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
+            }
+        }
+    )
+
+    return response.data.choices[0].message.content
+}
 
 export default {
     createSuggestion,
@@ -164,5 +217,5 @@ export default {
     updateSuggestion,
     deleteSuggestion,
     getAllSuggestionsNoFilter,
-    voteSuggestion
+    voteSuggestion, analyzeData
 };
