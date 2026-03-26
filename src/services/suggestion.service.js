@@ -188,7 +188,6 @@ Attachment: ${data.attachment_url}
         'https://openrouter.ai/api/v1/chat/completions',
         {
             model: 'nvidia/nemotron-3-super-120b-a12b:free',
-            max_tokens: 200,
             messages: [
                 {
                     role: 'system',
@@ -209,7 +208,6 @@ Attachment: ${data.attachment_url}
 
     return response.data.choices[0].message.content
 }
-
 export default {
     createSuggestion,
     getAllSuggestions,

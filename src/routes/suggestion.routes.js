@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as SuggestionController from '../controllers/suggestion.controller.js';
 import verifyToken from '../middlewares/auth.middleware.js';
 import upload from '../middlewares/upload.middleware.js';
+import { aiRateLimiter } from '../middlewares/rateLimiter.js';
 
 const router = Router();
 
@@ -233,6 +234,6 @@ router.delete('/:id', verifyToken, SuggestionController.deleteSuggestion);
 /*
 Analyzing using AI
 */
-router.post('/ai',SuggestionController.getAiAnalysis)
+router.post('/ai',aiRateLimiter,verifyToken,SuggestionController.getAiAnalysis)
 
 export default router;

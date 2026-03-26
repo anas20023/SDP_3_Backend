@@ -73,7 +73,8 @@ export const voteSuggestion = async (req, res) => {
 export const getAiAnalysis = async (req, res) => {
     try {
         // console.log(req.body.id)
-       const result = await SuggestionService.analyzeData(req.body.id)
+        const result = await SuggestionService.analyzeData(req.body.id)
+        res.set('Cache-Control', 'public, max-age=3600')
         res.json({ result })
     } catch (err) {
         res.status(500).json({ error: 'Failed' })
