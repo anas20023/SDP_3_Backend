@@ -69,6 +69,7 @@ const findData = async (user) => {
         dept:res.dept,
         intake:res.intake,
         section:res.section,
+        img_url:res.img_url,
         uploads:uploadsByUser,
         createdAt:res.createdAt
     }

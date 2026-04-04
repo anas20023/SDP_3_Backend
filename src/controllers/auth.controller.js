@@ -134,9 +134,10 @@ export const handleLogin = async (req, res) => {
             name: user.name,
             email: user.email,
             dept: user.dept,
-            createdAt: user.createdAt,
             intake: user.intake,
-            role: user.role
+            role: user.role,
+            img_url: user.img_url,
+            createdAt: user.createdAt,
         });
 
     } catch (error) {
@@ -206,8 +207,8 @@ export const updateProfile = async (req, res) => {
     try {
         // Auth middleware MUST attach req.user
         // Assuming req.user contains the user's base info from the token
-        const userId = req.user.id; 
-        
+        const userId = req.user.id;
+
         if (!userId) {
             return res.status(401).json({ message: 'Unauthorized: No user ID found' });
         }
@@ -247,4 +248,4 @@ export const updateProfile = async (req, res) => {
             message: error.message || 'Failed to update profile'
         });
     }
-};
+};
