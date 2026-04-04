@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as SuggestionController from '../controllers/suggestion.controller.js';
 import verifyToken from '../middlewares/auth.middleware.js';
 import upload from '../middlewares/upload.middleware.js';
+import { aiRateLimiter } from '../middlewares/rateLimiter.js';
 
 const router = Router();
 
@@ -229,5 +230,10 @@ router.post('/:id/vote', verifyToken, SuggestionController.voteSuggestion);
  *         description: Forbidden - Not authorized to delete this suggestion
  */
 router.delete('/:id', verifyToken, SuggestionController.deleteSuggestion);
+
+/*
+Analyzing using AI
+*/
+router.post('/ai',aiRateLimiter,verifyToken,SuggestionController.getAiAnalysis)
 
 export default router;
