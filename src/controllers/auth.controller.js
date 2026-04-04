@@ -4,7 +4,7 @@ import {
     AUTH_COOKIE_NAME,
     AUTH_COOKIE_OPTIONS
 } from '../config/auth.config.js';
-import { uploadFile } from '../services/r2.service.js';
+import { uploadFile, deleteFile } from '../services/r2.service.js';
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 /**
@@ -205,8 +205,6 @@ export const handleProfile = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
     try {
-        // Auth middleware MUST attach req.user
-        // Assuming req.user contains the user's base info from the token
         const userId = req.user.id;
 
         if (!userId) {
@@ -214,10 +212,15 @@ export const updateProfile = async (req, res) => {
         }
 
         const updateData = { ...req.body };
+        let oldImgUrl = null;
 
         // Handle image upload if a file is provided
         if (req.file) {
             try {
+                // Fetch current user to check for an existing image
+                const currentUser = await AuthService.findData(userId);
+                oldImgUrl = currentUser.img_url;
+
                 const imgUrl = await uploadFile(req.file);
                 updateData.img_url = imgUrl;
             } catch (uploadError) {
@@ -227,6 +230,16 @@ export const updateProfile = async (req, res) => {
         }
 
         const updatedUser = await AuthService.updateProfile(userId, updateData);
+
+        // If update was successful and there was an old image, delete it from storage
+        if (oldImgUrl) {
+            try {
+                await deleteFile(oldImgUrl);
+            } catch (deleteError) {
+                // We log the error but don't fail the request since the DB was updated successfully
+                console.error('Failed to delete old image from R2:', deleteError);
+            }
+        }
 
         return res.status(200).json({
             message: 'Profile updated successfully',
