@@ -158,56 +158,62 @@ const voteSuggestion = async (userId, suggestionId) => {
 };
 const analyzeData = async (id) => {
     const data = await Suggestion.findById(id)
-        .select('course_name dept description attachment_url')
+        .select('course_name dept description attachment_url');
 
     const prompt = `
-You are an assistant that explains academic content in a very simple way.
+You are an academic assistant.
 
-Your task:
-Create a short, easy-to-understand summary for end users.
+Write a structured explanation in exactly 3 paragraphs.
 
 Rules:
-- Use simple English (non-technical)
-- Maximum 3 sentences
-- Focus only on key idea
-- Ignore unnecessary details
-- Do NOT mention "_id" or database structure
-- If a URL is provided, just mention "attached resource" (do NOT analyze the link)
+- Each paragraph must contain 2–3 sentences
+- Use clear and simple English
+- Include important academic keywords (concepts, methods, applications)
+- Keep it informative but not overly technical
+- If attachment exists, say "attached resource"
+- Do NOT mention database or system details
 
-Output format:
-<your answer>
-
-Data:
 Course: ${data.course_name}
 Department: ${data.dept}
-Description: ${data.description}
+Description: ${data.description?.slice(0, 500)}
 Attachment: ${data.attachment_url}
-`
+    `;
 
-    const response = await axios.post(
-        'https://openrouter.ai/api/v1/chat/completions',
-        {
-            model: 'qwen/qwen3.6-plus:free',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You simplify academic content for general users.'
+    try {
+        const response = await axios.post(
+            'https://openrouter.ai/api/v1/chat/completions',
+            {
+                model: 'qwen/qwen3.6-plus:free',
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                reasoning: { enabled: true },
+                max_tokens: 100,     // ⬆️ allow deeper explanation
+                temperature: 0.3     // ⬆️ more expressive + keyword variety
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    'HTTP-Referer': 'http://localhost:3000',
+                    'X-Title': 'academic-explainer'
                 },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ]
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
+                timeout: 15000 // give it a bit more time for depth
             }
-        }
-    )
+        );
 
-    return response.data.choices[0].message.content
-}
+        return response.data.choices[0].message.content;
+
+    } catch (err) {
+        console.error("AI error:", err.message);
+
+        // fallback (still structured)
+        return `This course, ${data.course_name}, belongs to the ${data.dept} department and focuses on key academic concepts. It introduces important methods and practical applications related to the subject area.
+
+The course helps learners understand core principles, analytical thinking, and real-world usage. It builds foundational knowledge while encouraging problem-solving skills.
+
+Additional learning materials may be available as an attached resource for deeper understanding.`;
+    }
+};
 export default {
     createSuggestion,
     getAllSuggestions,
