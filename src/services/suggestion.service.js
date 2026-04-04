@@ -175,7 +175,7 @@ Rules:
 - If a URL is provided, just mention "attached resource" (do NOT analyze the link)
 
 Output format:
-Summary: <your answer>
+<your answer>
 
 Data:
 Course: ${data.course_name}
@@ -187,7 +187,7 @@ Attachment: ${data.attachment_url}
     const response = await axios.post(
         'https://openrouter.ai/api/v1/chat/completions',
         {
-            model: 'nvidia/nemotron-3-super-120b-a12b:free',
+            model: 'qwen/qwen3.6-plus:free',
             messages: [
                 {
                     role: 'system',
