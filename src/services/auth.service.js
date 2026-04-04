@@ -75,8 +75,36 @@ const findData = async (user) => {
     return filtered_data
 }
 
+const updateProfile = async (userId, updatedUserData) => {
+    const allowedFields = ['name', 'email', 'dept', 'intake', 'section', 'user_id', 'img_url'];
+    const updates = {};
+
+    for (const field of allowedFields) {
+        if (updatedUserData[field] !== undefined) {
+            updates[field] = updatedUserData[field];
+        }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        updates,
+        {
+            new: true,
+            runValidators: true
+        }
+    );
+
+    if (!updatedUser) {
+        throw new Error('User not Found');
+    }
+
+    return updatedUser;
+}
+
 export default {
     register,
     login,
-    findData
+    findData,
+    updateProfile
 }
+

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as authcontroller from '../controllers/auth.controller.js'
 import verifyToken from "../middlewares/auth.middleware.js";
+import upload from "../middlewares/upload.middleware.js";
 const router = Router()
 
 /**
@@ -103,6 +104,7 @@ router.post('/login', authcontroller.handleLogin)
  *         description: Unauthorized
  */
 router.get('/me', verifyToken, authcontroller.handleProfile)
+router.put('/update-profile',verifyToken,upload.single("img_url"),authcontroller.updateProfile)
 
 /**
  * @swagger

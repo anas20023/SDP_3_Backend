@@ -4,6 +4,7 @@ import {
     AUTH_COOKIE_NAME,
     AUTH_COOKIE_OPTIONS
 } from '../config/auth.config.js';
+import { uploadFile } from '../services/r2.service.js';
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 /**
@@ -196,3 +197,54 @@ export const handleProfile = async (req, res) => {
         });
     }
 };
+
+/**
+ * Update authenticated user profile
+ * PUT /api/auth/update-profile
+ */
+export const updateProfile = async (req, res) => {
+    try {
+        // Auth middleware MUST attach req.user
+        // Assuming req.user contains the user's base info from the token
+        const userId = req.user.id; 
+        
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized: No user ID found' });
+        }
+
+        const updateData = { ...req.body };
+
+        // Handle image upload if a file is provided
+        if (req.file) {
+            try {
+                const imgUrl = await uploadFile(req.file);
+                updateData.img_url = imgUrl;
+            } catch (uploadError) {
+                console.error('Image Upload Error:', uploadError);
+                return res.status(500).json({ message: 'Failed to upload image to storage' });
+            }
+        }
+
+        const updatedUser = await AuthService.updateProfile(userId, updateData);
+
+        return res.status(200).json({
+            message: 'Profile updated successfully',
+            user: {
+                name: updatedUser.name,
+                email: updatedUser.email,
+                user_id: updatedUser.user_id,
+                dept: updatedUser.dept,
+                intake: updatedUser.intake,
+                section: updatedUser.section,
+                img_url: updatedUser.img_url,
+                role: updatedUser.role,
+                createdAt: updatedUser.createdAt
+            }
+        });
+    } catch (error) {
+        console.error('Update Profile Error:', error);
+        return res.status(500).json({
+            message: error.message || 'Failed to update profile'
+        });
+    }
+};
