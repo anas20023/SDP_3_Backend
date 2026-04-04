@@ -10,6 +10,8 @@ import Logger from './src/services/logger.service.js'
 import morganMiddleware from './src/middlewares/logger.middleware.js'
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './src/config/swagger.js';
+import { inject } from '@vercel/analytics';
+
 const resolver= new dns.Resolver()
 resolver.getServers(['8.8.8.8', '8.8.4.4']) 
 const app = express()
@@ -40,9 +42,33 @@ app.use(morganMiddleware)
 
 app.use('/api', router)
 
+// Swagger UI with Vercel Analytics integration
+const swaggerOptions = {
+  customSiteTitle: "SDP 3 Backend API",
+  customJs: [],
+  customJsStr: `
+    // Vercel Web Analytics initialization
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    
+    // Load Vercel Analytics script
+    (function() {
+      var script = document.createElement('script');
+      script.defer = true;
+      script.src = '/_vercel/insights/script.js';
+      document.head.appendChild(script);
+    })();
+  `,
+  customCss: '',
+  swaggerOptions: {
+    persistAuthorization: true
+  }
+};
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Initialize Vercel Analytics for the Express backend
+// This enables analytics tracking when the app runs on Vercel
+inject({ mode: process.env.NODE_ENV === 'production' ? 'production' : 'development' });
 
 
 app.listen(PORT, () => {
