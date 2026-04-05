@@ -5,6 +5,7 @@ import {
     AUTH_COOKIE_OPTIONS
 } from '../config/auth.config.js';
 import { uploadFile, deleteFile } from '../services/r2.service.js';
+
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 /**
@@ -262,3 +263,39 @@ export const updateProfile = async (req, res) => {
         });
     }
 };
+export const handleChangePassword = async (req, res) => {
+    console.log(req.body)
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    if (!oldPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({
+            message: 'Old password, new password, and confirm password are required'
+        });
+    }
+
+    if (!passwordRegex.test(newPassword)) {
+        return res.status(422).json({
+            message:
+                'Password must be at least 8 characters long and contain uppercase, lowercase, digit, and special character'
+        });
+    }
+
+    if (newPassword !== confirmPassword) {
+        return res.status(422).json({
+            message: 'New password and confirm password do not match'
+        });
+    }
+
+    try {
+        const userId = req.user.id;
+        const result = await AuthService.ChangePassword(userId, oldPassword, newPassword, confirmPassword);
+        return res.status(200).json({
+            message: result?.message || 'Password changed successfully'
+        });
+    } catch (err) {
+        console.error('Change Password Error:', err);
+
+        return res.status(500).json({
+            message: err.message || 'Failed to change password'
+        });
+    }
+}

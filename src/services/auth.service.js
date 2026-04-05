@@ -102,10 +102,46 @@ const updateProfile = async (userId, updatedUserData) => {
     return updatedUser;
 }
 
+const ChangePassword = async (userId, oldPassword, newPassword, confirmPassword) => {
+    if (!userId) {
+        throw new Error('Unauthorized');
+    }
+   console.log({oldPassword,newPassword,confirmPassword})
+    if (newPassword !== confirmPassword) {
+        throw new Error('New password and confirm password do not match');
+    }
+
+    if (oldPassword === newPassword) {
+        throw new Error('New password must be different from old password');
+    }
+
+    // Basic password policy
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+        throw new Error('Password must be at least 8 characters and include uppercase, lowercase, number, and special character');
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('User not Found');
+    }
+
+    const isOldPasswordValid = await bcrypt.compare(oldPassword, user.passwordHash);
+    if (!isOldPasswordValid) {
+        throw new Error('Old password is incorrect');
+    }
+
+    const salt = await bcrypt.genSalt(12);
+    user.passwordHash = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    return { message: 'Password changed successfully' };
+}
 export default {
     register,
     login,
     findData,
-    updateProfile
+    updateProfile,
+    ChangePassword
 }
 

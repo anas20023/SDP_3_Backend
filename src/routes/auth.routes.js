@@ -104,6 +104,7 @@ router.post('/login', authcontroller.handleLogin)
  *         description: Unauthorized
  */
 router.get('/me', verifyToken, authcontroller.handleProfile)
+router.post('/change-password',verifyToken,authcontroller.handleChangePassword)
 router.put('/update-profile',verifyToken,upload.single("img_url"),authcontroller.updateProfile)
 
 /**
