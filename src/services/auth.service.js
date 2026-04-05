@@ -106,7 +106,7 @@ const ChangePassword = async (userId, oldPassword, newPassword, confirmPassword)
     if (!userId) {
         throw new Error('Unauthorized');
     }
-   console.log({oldPassword,newPassword,confirmPassword})
+   //console.log({oldPassword,newPassword,confirmPassword})
     if (newPassword !== confirmPassword) {
         throw new Error('New password and confirm password do not match');
     }
