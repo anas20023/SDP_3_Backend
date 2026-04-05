@@ -197,7 +197,7 @@ Attachment: ${data.attachment_url}
                     'HTTP-Referer': 'http://localhost:3000',
                     'X-Title': 'academic-explainer'
                 },
-                timeout: 5000 // give it a bit more time for depth
+                timeout: 6000 // give it a bit more time for depth
             }
         );
 
