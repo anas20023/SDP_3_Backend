@@ -189,7 +189,7 @@ Attachment: ${data.attachment_url}
                 ],
                 reasoning: { enabled: true },
                 max_tokens: 100,     // ⬆️ allow deeper explanation
-                temperature: 0.3     // ⬆️ more expressive + keyword variety
+               // temperature: 0.3     // ⬆️ more expressive + keyword variety
             },
             {
                 headers: {
@@ -197,7 +197,7 @@ Attachment: ${data.attachment_url}
                     'HTTP-Referer': 'http://localhost:3000',
                     'X-Title': 'academic-explainer'
                 },
-                timeout: 9000 // give it a bit more time for depth
+                timeout: 5000 // give it a bit more time for depth
             }
         );
 
