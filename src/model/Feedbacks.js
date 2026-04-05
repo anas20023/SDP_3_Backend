@@ -3,7 +3,7 @@ const feedbackSchema = new mongoose.Schema(
     {
         category:{
             type:String,
-            enum:['bug','feature','content','others'],
+            enum:['general','bug','feature','content','others'],
             required:true
         },
         subject:{
