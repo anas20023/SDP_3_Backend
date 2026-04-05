@@ -40,7 +40,7 @@ const router = Router()
  *       201:
  *         description: Feedback submitted successfully
  */
-router.post('/', feedbackController.createFeedback)
+router.post('/',verifyToken, feedbackController.createFeedback)
 
 /**
  * @swagger
