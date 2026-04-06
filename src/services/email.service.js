@@ -33,7 +33,7 @@ const sendEmail = async (to, subject, html) => {
             }
         };
 
-        const info = await transporter.sendMail(mailOptions);
+        const info = transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
         return info;
     } catch (error) {
