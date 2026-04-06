@@ -1,6 +1,15 @@
 import Suggestion from '../model/suggestions.js';
+import User from '../model/users.js';
 import { uploadFile, deleteFile, getSignedFileUrl, R2_PUBLIC_URL } from './r2.service.js';
 import axios from 'axios';
+import emailService from './email.service.js';
+import { 
+    getSuggestionUploadEmail, 
+    getSuggestionApprovedEmail, 
+    getSuggestionRejectedEmail, 
+    getVoteNotificationEmail,
+    getGlobalSuggestionAlertEmail
+} from '../templates/emailTemplates.js';
 const createSuggestion = async (userId, body, file) => {
 
     //console.log(body)
@@ -17,6 +26,17 @@ const createSuggestion = async (userId, body, file) => {
     });
 
     await suggestion.save();
+    
+    // Send Upload Confirmation Email
+    const user = await User.findById(userId);
+    if (user && user.email) {
+        emailService.sendEmail(
+            user.email,
+            'Upload Successful: Your Suggestion is Received',
+            getSuggestionUploadEmail(user.name, suggestion.course_name || 'Your Suggestion')
+        );
+    }
+
     return suggestion;
 };
 
@@ -104,12 +124,49 @@ const updateSuggestion = async (userId, userRole, suggestionId, updateData, file
         attachment_url = await uploadFile(file);
     }
 
+    const oldStatus = suggestion.status;
     Object.assign(suggestion, {
         ...updateData,
         attachment_url
     });
 
     await suggestion.save();
+
+    // Check for status change to notify user
+    if (updateData.status && updateData.status !== oldStatus) {
+        const user = await User.findById(suggestion.uploaded_by);
+        if (user && user.email) {
+            if (updateData.status === 'approved') {
+                emailService.sendEmail(
+                    user.email,
+                    'Good News! Your Suggestion is Approved',
+                    getSuggestionApprovedEmail(user.name, suggestion.course_code || suggestion.course_name)
+                );
+
+                // Send Alert to All Users
+                const allUsers = await User.find({}, 'email');
+                const userEmails = allUsers.map(u => u.email).filter(Boolean);
+                
+                if (userEmails.length > 0) {
+                    // We send one email with BCC to all users for efficiency
+                    // Note: For very large user bases, consider a job queue or bulk mail service.
+                    emailService.sendEmail(
+                        userEmails, // Nodemailer handles array as recipients
+                        'New Suggestion Uploaded in SuggestMe',
+                        getGlobalSuggestionAlertEmail(suggestion.course_name, suggestion.course_code)
+                    );
+                }
+
+            } else if (updateData.status === 'rejected') {
+                emailService.sendEmail(
+                    user.email,
+                    'Feedback on Your Recent Suggestion',
+                    getSuggestionRejectedEmail(user.name, suggestion.course_code || suggestion.course_name, updateData.rejection_reason)
+                );
+            }
+        }
+    }
+
     return suggestion;
 };
 
@@ -152,6 +209,17 @@ const voteSuggestion = async (userId, suggestionId) => {
         const exists = await Suggestion.findById(suggestionId);
         if (!exists) throw new Error('Suggestion not found');
         throw new Error('You have already voted for this suggestion');
+    }
+
+    // Send Vote Notification to Owner
+    const owner = await User.findById(suggestion.uploaded_by);
+    const voter = await User.findById(userId);
+    if (owner && owner.email) {
+        emailService.sendEmail(
+            owner.email,
+            'You Got a New Vote!',
+            getVoteNotificationEmail(owner.name, voter ? voter.name : 'Someone', suggestion.course_name || 'Your Suggestion')
+        );
     }
 
     return suggestion;
