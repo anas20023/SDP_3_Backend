@@ -213,7 +213,7 @@ router.get('/suggestions/:id', verifyToken, requireRole(['admin', 'teacher', 'mo
  *       200:
  *         description: Suggestion updated successfully
  */
-router.put('/suggestions/:id', verifyToken, requireRole(['admin', 'mod']), upload.single('file'), manageController.updateSuggestion)
+router.put('/suggestions/:id', verifyToken, requireRole(['admin','teacher', 'mod']), upload.single('file'), manageController.updateSuggestion)
 
 /**
  * @swagger
@@ -233,6 +233,6 @@ router.put('/suggestions/:id', verifyToken, requireRole(['admin', 'mod']), uploa
  *       200:
  *         description: Suggestion deleted successfully
  */
-router.delete('/suggestions/:id', verifyToken, requireRole(['admin', 'mod']), manageController.deleteSuggestion)
+router.delete('/suggestions/:id', verifyToken, requireRole(['admin', 'teacher','mod']), manageController.deleteSuggestion)
 
 export default router
