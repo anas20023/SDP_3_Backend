@@ -32,7 +32,10 @@ const sendEmail = async (to, subject, html, isPromo = false) => {
             mailOptions.headers = {
                 'Precedence': 'bulk',
                 'List-Unsubscribe': `<mailto:unsubscribe@suggestme.com>`,
-                'X-Auto-Response-Suppress': 'OOF, AutoReply'
+                'List-ID': `"SuggestMe Updates" <updates.suggestme.com>`,
+                'X-Campaign': 'promotions',
+                'X-Mailer': 'SuggestMe Newsletter',
+                'X-Auto-Response-Suppress': 'All' // Stop out-of-office replies for bulk emails
             };
         } else {
             mailOptions.priority = 'high';
