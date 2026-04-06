@@ -21,7 +21,8 @@ const sendEmail = async (to, subject, html) => {
     try {
         const mailOptions = {
             from: `"Suggest Me" <${process.env.EMAIL}>`,
-            to,
+            to: process.env.EMAIL, // Sending to self to keep TO field valid
+            bcc: to,               // Actual recipient(s) in BCC for privacy
             subject,
             html,
             priority: 'high',
