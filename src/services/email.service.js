@@ -15,9 +15,10 @@ const transporter = nodemailer.createTransport({
  * @param {string} to - Recipient email address.
  * @param {string} subject - Email subject.
  * @param {string} html - Email body in HTML format.
+ * @param {boolean} [isPromo=false] - Whether to send as a promotional email.
  * @returns {Promise} - Resolves on success, rejects on error.
  */
-const sendEmail = async (to, subject, html) => {
+const sendEmail = async (to, subject, html, isPromo = false) => {
     try {
         const mailOptions = {
             from: `"Suggest Me" <${process.env.EMAIL}>`,
@@ -25,15 +26,24 @@ const sendEmail = async (to, subject, html) => {
             bcc: to,               // Actual recipient(s) in BCC for privacy
             subject,
             html,
-            priority: 'high',
-            headers: {
+        };
+
+        if (isPromo) {
+            mailOptions.headers = {
+                'Precedence': 'bulk',
+                'List-Unsubscribe': `<mailto:unsubscribe@suggestme.com>`,
+                'X-Auto-Response-Suppress': 'OOF, AutoReply'
+            };
+        } else {
+            mailOptions.priority = 'high';
+            mailOptions.headers = {
                 'X-Priority': '1 (Highest)',
                 'X-MSMail-Priority': 'High',
                 'Importance': 'high'
-            }
-        };
+            };
+        }
 
-        const info = transporter.sendMail(mailOptions);
+        const info = await transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
         return info;
     } catch (error) {

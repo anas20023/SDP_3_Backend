@@ -194,3 +194,19 @@ export const getGlobalSuggestionAlertEmail = (courseName, courseCode) => {
     `;
     return wrapTemplate('📚 New Academic Resource Available', content, '#4f46e5');
 };
+
+export const getFeedbackAdminAlertEmail = (feedbackType, feedbackMessage) => {
+    const content = `
+        <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 700;">New Feedback Received 📝</h2>
+        <p>A user has submitted new feedback for the platform.</p>
+        <div style="background: #ffffff; border-radius: 20px; padding: 20px; margin: 24px 0; border: 1px solid #e2e8f0; box-shadow: 0 4px 8px rgba(0,0,0,0.02);">
+            <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #f59e0b;">Feedback Type</p>
+            <p style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #0f172a;">${feedbackType || 'General'}</p>
+            <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #4f46e5;">Message</p>
+            <p style="margin: 0; font-size: 16px; font-weight: 500; font-style: italic; color: #334155;">"${feedbackMessage}"</p>
+        </div>
+        <p>Please review it in the admin dashboard when you have a moment.</p>
+        <a href="#" style="${buttonStyles('#4f46e5')}">⚙️ Open Dashboard</a>
+    `;
+    return wrapTemplate('📝 New Feedback Submitted', content, '#f59e0b');
+};

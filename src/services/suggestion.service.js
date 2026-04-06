@@ -153,11 +153,12 @@ const updateSuggestion = async (userId, userRole, suggestionId, updateData, file
                     emailService.sendEmail(
                         userEmails, // Nodemailer handles array as recipients
                         'New Suggestion Uploaded in SuggestMe',
-                        getGlobalSuggestionAlertEmail(suggestion.course_name, suggestion.course_code)
+                        getGlobalSuggestionAlertEmail(suggestion.course_name, suggestion.course_code),
+                        true // Marks as promotional email to route to Promotions tab
                     );
                 }
 
-            } else if (updateData.status === 'rejected') {
+            } else if (updateData.status === 'reject') {
                 emailService.sendEmail(
                     user.email,
                     'Feedback on Your Recent Suggestion',
