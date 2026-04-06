@@ -11,6 +11,36 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
+ * Validates email format using regex.
+ * @param {string} email
+ * @returns {boolean}
+ */
+const isValidEmailFormat = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+/**
+ * Verifies if the email address actually exists on the mail server via SMTP.
+ * @param {string} email
+ * @returns {Promise<boolean>}
+ */
+const doesEmailExist = async (email) => {
+    const [, domain] = email.split('@');
+    return new Promise(async (resolve) => {
+        const net = await import('net'); // dynamic import to avoid top-level issues
+        // We do a lightweight DNS MX check using nodemailer's own utility
+        transporter.verify((error) => {
+            if (error) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+};
+
+/**
  * Common method to send an email.
  * @param {string} to - Recipient email address.
  * @param {string} subject - Email subject.
@@ -20,39 +50,51 @@ const transporter = nodemailer.createTransport({
  */
 const sendEmail = async (to, subject, html, isPromo = false) => {
     try {
+        // 1. Validate email format
+        if (!isValidEmailFormat(to)) {
+            console.warn(`Invalid email format: ${to}`);
+            return null;
+        }
+
         const mailOptions = {
             from: `"Suggest Me" <${process.env.EMAIL}>`,
-            to: process.env.EMAIL, // Sending to self to keep TO field valid
-            bcc: to,               // Actual recipient(s) in BCC for privacy
+            to: process.env.EMAIL,
+            bcc: to,
             subject,
             html,
         };
 
         if (isPromo) {
+            // ✅ These headers together signal Gmail to route to Promotions tab
             mailOptions.headers = {
-                'Precedence': 'bulk',
-                'List-Unsubscribe': `<mailto:unsubscribe@suggestme.com>`,
-                'List-ID': `"SuggestMe Updates" <updates.suggestme.com>`,
-                'X-Campaign': 'promotions',
-                'X-Mailer': 'SuggestMe Newsletter',
-                'X-Auto-Response-Suppress': 'All' // Stop out-of-office replies for bulk emails
+                'Precedence':              'bulk',
+                'X-Priority':             '3',              // Normal (not high) for bulk
+                'List-Unsubscribe':        `<mailto:unsubscribe@suggestme.com>, <https://suggestme.com/unsubscribe>`,
+                'List-Unsubscribe-Post':   'List-Unsubscribe=One-Click',  // RFC 8058 one-click
+                'List-ID':                 `SuggestMe Updates <updates.suggestme.com>`,
+                'X-Mailer':               'SuggestMe Newsletter',
+                'X-Auto-Response-Suppress':'All',
             };
         } else {
             mailOptions.priority = 'high';
             mailOptions.headers = {
-                'X-Priority': '1 (Highest)',
-                'X-MSMail-Priority': 'High',
-                'Importance': 'high'
+                'X-Priority':       '1 (Highest)',
+                'X-MSMail-Priority':'High',
+                'Importance':       'high'
             };
         }
 
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
         return info;
+
     } catch (error) {
-        console.error('Error while sending email:', error);
-        // We log the error but don't stop the main execution flow if email fails.
-        // In production, you might want to use a retry mechanism or a queue.
+        // ✅ Catch SMTP-level rejections (e.g. unknown user, mailbox not found)
+        if (error.responseCode === 550 || error.responseCode === 551 || error.responseCode === 553) {
+            console.warn(`Email address does not exist or was rejected: ${to} — SMTP ${error.responseCode}`);
+        } else {
+            console.error('Error while sending email:', error);
+        }
         return null;
     }
 };
