@@ -2,6 +2,8 @@ import User from '../model/users.js';
 import Suggestion from '../model/suggestions.js'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import emailService from './email.service.js';
+import { getWelcomeEmail, getPasswordChangeEmail } from '../templates/emailTemplates.js';
 
 const register = async (userData) => {
     // Check if user already exists
@@ -24,6 +26,14 @@ const register = async (userData) => {
     });
 
     await user.save();
+    
+    // Send Welcome Email
+    emailService.sendEmail(
+        user.email,
+        'Welcome to Our Platform!',
+        getWelcomeEmail(user.name)
+    );
+
     return user;
 };
 
@@ -134,6 +144,13 @@ const ChangePassword = async (userId, oldPassword, newPassword, confirmPassword)
     const salt = await bcrypt.genSalt(12);
     user.passwordHash = await bcrypt.hash(newPassword, salt);
     await user.save();
+
+    // Send Password Change Notification
+    emailService.sendEmail(
+        user.email,
+        'Security Alert: Password Changed',
+        getPasswordChangeEmail(user.name)
+    );
 
     return { message: 'Password changed successfully' };
 }
