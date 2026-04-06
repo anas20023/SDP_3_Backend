@@ -82,11 +82,23 @@ export const getUserById = async (req, res) => {
 }
 export const updateUser = async (req, res) => {
     try {
-        const { id } = req.params
-        const updated = await manageService.updateUser(id, req.body)
-        return res.status(200).json(updated)
+        const { id } = req.params;
+        const { name, user_id, email, role, dept, intake, section } = req.body;
+        
+        const updateData = {
+            ...(name && { name }),
+            ...(user_id && { user_id }),
+            ...(email && { email }),
+            ...(role && { role }),
+            ...(dept !== undefined && { dept }),
+            ...(intake !== undefined && { intake }),
+            ...(section !== undefined && { section })
+        };
+
+        const updated = await manageService.updateUser(id, updateData);
+        return res.status(200).json(updated);
     } catch (error) {
-        return res.status(400).json({ message: error.message })
+        return res.status(400).json({ message: error.message });
     }
 }
 
