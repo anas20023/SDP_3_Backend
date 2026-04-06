@@ -47,7 +47,7 @@ const getAllSuggestions = async (filters = {}) => {
     if (filters.course_code) query.course_code = filters.course_code;
 
     let suggestions = await Suggestion.find(query)
-        .populate('uploaded_by', 'name email')
+        .populate('uploaded_by', 'name email img_url')
         .sort({ createdAt: -1 })
         .limit(filters.limit ? parseInt(filters.limit) : 10) // Add limit for pagination
         .lean();

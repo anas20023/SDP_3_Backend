@@ -71,7 +71,7 @@ router.post('/', verifyToken, upload.single('file'), SuggestionController.create
  *               items:
  *                 $ref: '#/components/schemas/Suggestion'
  */
-router.get('/', SuggestionController.getAllSuggestions);
+router.get('/',aiRateLimiter, SuggestionController.getAllSuggestions);
 
 /**
  * @swagger
