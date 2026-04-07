@@ -17,6 +17,9 @@ const transporter = nodemailer.createTransport({
  */
 const isValidEmailFormat = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (Array.isArray(email)) {
+        return email.every(e => emailRegex.test(e));
+    }
     return emailRegex.test(email);
 };
 
@@ -56,10 +59,11 @@ const sendEmail = async (to, subject, html, isPromo = false) => {
             return null;
         }
 
+        const isArray = Array.isArray(to);
         const mailOptions = {
             from: `"Suggest Me" <${process.env.EMAIL}>`,
-            to: process.env.EMAIL,
-            bcc: to,
+            to: isArray ? process.env.EMAIL : to,
+            bcc: isArray ? to : undefined,
             subject,
             html,
         };
