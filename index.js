@@ -45,7 +45,11 @@ app.use('/api', router)
 // Swagger UI with Vercel Analytics integration
 const swaggerOptions = {
   customSiteTitle: "SDP 3 Backend API",
-  customJs: [],
+  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css",
+  customJs: [
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-standalone-preset.min.js"
+  ],
   customJsStr: `
     // Vercel Web Analytics initialization
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -58,7 +62,6 @@ const swaggerOptions = {
       document.head.appendChild(script);
     })();
   `,
-  customCss: '',
   swaggerOptions: {
     persistAuthorization: true
   }
