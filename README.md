@@ -1,7 +1,7 @@
 # 🖥️ Suggestion Sharing Platform – Backend
 
 This repository contains the **backend service** of the **Suggestion Sharing Platform**, built with **Node.js, Express.js, and MongoDB**.
-It provides RESTful APIs for authentication, suggestion management, user interaction, and admin moderation.
+It provides RESTful APIs for authentication, suggestion management, user interaction, subscriptions, feedback, and comprehensive admin moderation.
 
 ---
 
@@ -10,19 +10,21 @@ It provides RESTful APIs for authentication, suggestion management, user interac
 The backend acts as the core system responsible for:
 
 * Business logic processing
-* Database operations
-* Authentication & authorization
-* Secure communication with frontend applications
+* Database operations via MongoDB/Mongoose
+* Authentication & authorization using JWT
+* Cloud storage integration (S3/Cloudflare R2) for media and file attachments
+* Secure communication with frontend applications and email notifications
 
 ---
 
 ## 🎯 Objectives
 
-* Provide secure REST APIs
-* Handle authentication and authorization
-* Manage suggestions and user interactions
-* Enable admin moderation
-* Ensure data integrity and security
+* Provide secure REST APIs documented with Swagger
+* Handle complex role-based authentication and authorization
+* Manage suggestions, user interactions, and robust subscriptions
+* Enable full admin visibility via dashboards and analytics
+* Facilitate real feedback ticketing & automated email flows
+* Ensure data integrity and scalability
 
 ---
 
@@ -31,113 +33,115 @@ The backend acts as the core system responsible for:
 ### 🔐 Authentication & Users
 
 * User registration and login
-* JWT-based authentication
-* Role-based access (User / Admin)
-* User profile management
+* JWT-based security and profile updates (including Cloudflare avatar uploads)
+* Role-based access (Student, Teacher, Admin, Mod)
+* Change password features
 
 ### 💡 Suggestions
 
 * Create, read, update, delete suggestions
-* Category-based organization
-* Search and filtering
+* Category-based organization and attachments
+* Approval flow for Admins
 
-### 📈 Engagement
+### 📈 Engagement & Support
 
-* Like / upvote system
-* Comment system
-* Suggestion status tracking
+* Like / upvote system & real-time tracking
+* Subscription plans for premium users / alert downloads
+* Dynamic Feedback ticketing system integrating with automatic emails
+* In-app analytics
 
 ### 🛠️ Admin Features
 
-* User management
-* Category management
-* Suggestion approval / rejection
-* Content moderation
-
-### 🔒 Security
-
-* JWT authentication
-* Input validation
-* Protected routes
+* Granular user management (Update roles, permissions natively)
+* Suggestions bulk management
+* Deep dives into platform analytics and activity
+* Advanced file management (Uploads using Multer, moderation controls)
 
 ---
 
 ## 🏗️ Tech Stack
 
-| Layer          | Technology |
-| -------------- | ---------- |
-| Runtime        | Node.js    |
-| Framework      | Express.js |
-| Database       | MongoDB    |
-| ODM            | Mongoose   |
-| Authentication | JWT        |
-| API Style      | REST       |
-| Environment    | dotenv     |
+| Layer          | Technology                     |
+| -------------- | ------------------------------ |
+| Runtime        | Node.js                        |
+| Framework      | Express.js                     |
+| Database       | MongoDB (Mongoose)             |
+| Authentication | JWT                            |
+| Cloud Storage  | AWS SDK (S3 / Cloudflare R2)   |
+| API Documentation| Swagger (swagger-jsdoc & ui)|
+| Communications | Nodemailer                     |
 
 ---
 
 ## 📂 Project Structure
 
-```
+```text
 src/
 │
 ├── config/
-│   ├── db.js
-│   ├── env.js
+│   ├── db.js (MongoDB Connection)
+│   ├── swagger.js (API Documentation Specs)
 │
 ├── controllers/
 │   ├── auth.controller.js
 │   ├── suggestion.controller.js
-│   ├── admin.controller.js
+│   ├── manage.controller.js
+│   ├── feedback.controller.js
+│   ├── subscription.controller.js
 │
-├── models/
-│   ├── user.model.js
-│   ├── suggestion.model.js
-│   ├── category.model.js
-│   ├── comment.model.js
+├── model/
+│   ├── users.js
+│   ├── suggestions.js
+│   ├── Feedbacks.js
+│   ├── subscription.js
+│   ├── subscriptionPlan.js
 │
 ├── routes/
-│   ├── auth.routes.js
-│   ├── suggestion.routes.js
-│   ├── admin.routes.js
+│   ├── index.js (API Router aggregations, sets /api prefix)
+│   ├── auth.routes.js (/api/auth)
+│   ├── manage.routes.js (/api/manage)
+│   ├── suggestion.routes.js (/api/suggestions)
+│   ├── feedback.routes.js (/api/feedback)
+│   ├── subscription.routes.js (/api/subsc)
 │
 ├── middlewares/
 │   ├── auth.middleware.js
-│   ├── error.middleware.js
+│   ├── requireRole.middleware.js
+│   ├── upload.middleware.js (Multer)
 │
-├── utils/
-│   ├── response.js
+├── services/ & templates/
+│   ├── logger.service.js
+│   ├── (Email Templates & Services)
 │
-├── app.js
-├── server.js
+├── app.js / index.js (Main Entry Points)
 ```
 
 ---
 
 ## 🔌 API Overview
 
-### 🔑 Auth Routes
+Explore full interactive documentation locally by firing up the server and visiting: `/api-docs`
 
-* POST /api/auth/register
-* POST /api/auth/login
+**Sample Endpoints:**
 
-### 💡 Suggestion Routes
+**Authentication (`/api/auth`)**
+* `POST /auth/register` : Create Account
+* `POST /auth/login` : Authenticate User
+* `GET /auth/me` : Get logged in user profile
+* `PUT /auth/update-profile` : Modify user info / profile picture
+* `POST /auth/change-password` : Update security credentials
 
-* GET /api/suggestions
-* POST /api/suggestions
-* PUT /api/suggestions/:id
-* DELETE /api/suggestions/:id
+**Suggestions (`/api/suggestions`)**
+* `GET /suggestions` : View all verified suggestions
+* `POST /suggestions` : Upload a new suggestion doc
 
-### 📊 Engagement
+**Manage / Admin (`/api/manage`)**
+* `GET /manage/users` : Retrieve user pools by role
+* `PUT /manage/users/:id` : Restrict/Update user capabilities
+* `GET /manage/analytics` : Fetch system stats
 
-* POST /api/suggestions/:id/like
-* POST /api/suggestions/:id/comment
-
-### 🛠️ Admin Routes
-
-* GET /api/admin/users
-* PUT /api/admin/suggestions/:id/approve
-* DELETE /api/admin/suggestions/:id
+**Feedbacks (`/api/feedback`)**
+* `POST /feedback` : Log a complaint/suggestion (triggers email flows)
 
 ---
 
@@ -146,8 +150,8 @@ src/
 ### Prerequisites
 
 * Node.js (v18+)
-* MongoDB
-* npm or yarn
+* MongoDB Instance (Local/Atlas)
+* Application credentials for remote S3 buckets / Cloudflare R2 / Email SMTP
 
 ### Installation
 
@@ -164,7 +168,7 @@ npm install
 # Setup env
 cp .env.example .env
 
-# Run server
+# Run server in dev mode
 npm run dev
 ```
 
@@ -172,37 +176,28 @@ npm run dev
 
 ## 🔐 Environment Variables
 
+Ensure the following variables are set in your `.env` file:
+
 ```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/suggestion_platform
-JWT_SECRET=your_secret
-JWT_EXPIRES_IN=7d
+PORT=3000
+MONGODB_URI=your_mongodb_cluster_uri
+JWT_SECRET=your_secret_key
+# Email service options
+SMTP_HOST=your_host
+SMTP_PASS=your_pass
+# Cloudflare S3 configs for images
+S3_BUCKET=bucket_name
+S3_ENDPOINT=your_r2_endpoint
+S3_ACCESS_KEY_ID=xxx
+S3_SECRET_ACCESS_KEY=xxx
 ```
 
 ---
 
 ## 🧪 Testing
 
-* Postman / Insomnia for API testing
-* Manual endpoint testing
-* Error handling validation
-
----
-
-## ⚠️ Limitations
-
-* No real-time updates
-* Manual moderation
-* Performance depends on indexing
-
----
-
-## 🔮 Future Improvements
-
-* WebSocket / real-time updates
-* Redis caching
-* Advanced analytics
-* Microservices architecture
+* **API Docs**: Use `/api-docs` via Swagger UI.
+* **Standard Test Suites**: Testing can be executed via Insomnia or Postman imports targeting localhost.
 
 ---
 

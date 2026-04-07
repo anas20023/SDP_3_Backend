@@ -104,7 +104,58 @@ router.post('/login', authcontroller.handleLogin)
  *         description: Unauthorized
  */
 router.get('/me', verifyToken, authcontroller.handleProfile)
+
+/**
+ * @swagger
+ * /auth/change-password:
+ *   post:
+ *     summary: Change user password
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [oldPassword, newPassword]
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password changed successfully
+ *       400:
+ *         description: Invalid input or old password incorrect
+ */
 router.post('/change-password',verifyToken,authcontroller.handleChangePassword)
+
+/**
+ * @swagger
+ * /auth/update-profile:
+ *   put:
+ *     summary: Update user profile including image
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               img_url:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ */
 router.put('/update-profile',verifyToken,upload.single("img_url"),authcontroller.updateProfile)
 
 /**

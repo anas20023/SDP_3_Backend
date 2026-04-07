@@ -138,6 +138,33 @@ const options = {
                         }
                     },
                 },
+                Feedback: {
+                    type: 'object',
+                    required: ['category', 'subject', 'message'],
+                    properties: {
+                        _id: {
+                            type: 'string',
+                            description: 'Auto-generated MongoDB ID'
+                        },
+                        category: {
+                            type: 'string',
+                            enum: ['general', 'bug', 'feature', 'content', 'others'],
+                            description: 'Category of the feedback'
+                        },
+                        subject: {
+                            type: 'string',
+                            description: 'Subject of the feedback'
+                        },
+                        message: {
+                            type: 'string',
+                            description: 'Feedback message content'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time'
+                        }
+                    }
+                },
                 SubscriptionPlan: {
                     type: 'object',
                     required: ['name', 'price', 'durationInDays', 'downloadLimit'],
