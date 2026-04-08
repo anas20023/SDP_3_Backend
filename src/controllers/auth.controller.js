@@ -54,7 +54,6 @@ export const handleRegister = async (req, res) => {
                 message: 'Student record not found'
             });
         }
-
         // const normalizedClientName = name.trim().toLowerCase();
         // const normalizedServerName = serverData.sis_std_name.trim().toLowerCase();
 
@@ -66,7 +65,7 @@ export const handleRegister = async (req, res) => {
 
         /* 5. Register User */
         await AuthService.register({
-            name,
+            name: serverData.sis_std_name,
             user_id,
             email,
             password,
