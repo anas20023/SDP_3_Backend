@@ -70,6 +70,9 @@ The backend acts as the core system responsible for:
 | Cloud Storage  | AWS SDK (S3 / Cloudflare R2)   |
 | API Documentation| Swagger (swagger-jsdoc & ui)|
 | Communications | Nodemailer                     |
+| Testing (API)  | Jest, Supertest                |
+| Testing (DB)   | MongoDB Memory Server          |
+| Testing (Load) | k6                             |
 
 ---
 
@@ -112,6 +115,12 @@ src/
 ├── services/ & templates/
 │   ├── logger.service.js
 │   ├── (Email Templates & Services)
+│
+├── tests/
+│   ├── auth.test.js (Auth flow tests)
+│   ├── suggestions.test.js (Submission/Voting tests)
+│   ├── setup.js (Memory Server global setup)
+│   ├── stress_test.js (k6 load testing script)
 │
 ├── app.js / index.js (Main Entry Points)
 ```
@@ -190,14 +199,49 @@ S3_BUCKET=bucket_name
 S3_ENDPOINT=your_r2_endpoint
 S3_ACCESS_KEY_ID=xxx
 S3_SECRET_ACCESS_KEY=xxx
+
+# Testing
+DATABASE_TEST_URL=mongodb://localhost:27017/sdp3_test
 ```
 
 ---
 
 ## 🧪 Testing
 
-* **API Docs**: Use `/api-docs` via Swagger UI.
-* **Standard Test Suites**: Testing can be executed via Insomnia or Postman imports targeting localhost.
+The project uses a two-tier testing strategy: **Automated Blackbox Testing** for logic/integration and **Stress Testing** for performance.
+
+### 1. Automated API Tests (Jest)
+Located in `tests/`, these tests use `mongodb-memory-server` to provide a dedicated, isolated database environment.
+
+**Test Cases Covered:**
+- **Authentication**: Successful registration (mocked student verification), valid/invalid login, and credential validation (regex).
+- **Suggestions**: Public viewing of suggestions, protected creation, and unauthorized voting constraints.
+
+**Run Instructions:**
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+### 2. Stress Testing (k6)
+Located at `tests/stress_test.js`, this script simulates real-world load.
+
+**Scenarios:**
+- **Ramp-up**: 1 to 20 users over 30s.
+- **Sustained Load**: 20 concurrent users for 1 minute.
+- **Endpoints**: `GET /api/suggestions` and `POST /api/auth/login`.
+
+**Run Instructions:**
+*(Requires [k6](https://k6.io/docs/getting-started/installation/) installed on your machine)*
+```bash
+k6 run tests/stress_test.js
+```
+
+### 3. API Documentation (Swagger)
+Explore interactive documentation at: `http://localhost:5000/api-docs`
 
 ---
 

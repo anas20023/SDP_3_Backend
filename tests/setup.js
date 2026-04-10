@@ -8,11 +8,21 @@ configDotenv();
 // Global mock for external services
 jest.unstable_mockModule('../src/services/checkStudentID.service.js', () => ({
     checkStudentID: jest.fn().mockResolvedValue({
-        sis_std_name: 'Anas Ibn Belal',
-        sis_std_intk: '52',
+        sis_std_name: 'Test Student',
+        sis_std_intk: '44',
         sis_std_Status: 'R'
     })
 }));
+
+jest.unstable_mockModule('../src/services/email.service.js', () => ({
+    default: {
+        sendEmail: jest.fn().mockResolvedValue({ response: '250 OK' }),
+        sendResetPasswordEmail: jest.fn().mockResolvedValue({ response: '250 OK' }),
+        sendConfirmationEmail: jest.fn().mockResolvedValue({ response: '250 OK' })
+    }
+}));
+
+
 
 let mongoServer;
 
