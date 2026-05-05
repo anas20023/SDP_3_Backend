@@ -51,7 +51,7 @@ export const handleRegister = async (req, res) => {
 
         if (!serverData) {
             return res.status(404).json({
-                message: 'Student record not found'
+                message: 'Student not found !'
             });
         }
         // const normalizedClientName = name.trim().toLowerCase();
