@@ -143,8 +143,16 @@ export const handleLogin = async (req, res) => {
     } catch (error) {
         console.error('Login Error:', error);
 
-        return res.status(401).json({
-            message: 'Invalid email or password'
+        const isAuthError =
+            error?.code === 'INVALID_CREDENTIALS' ||
+            error?.code === 'USER_NOT_FOUND' ||
+            error?.code === 'INVALID_PASSWORD' ||
+            error?.statusCode === 401;
+
+        return res.status(error?.statusCode || 401).json({
+            message: isAuthError
+                ? 'Invalid email or password'
+                : error?.message || 'Login failed'
         });
     }
 };
