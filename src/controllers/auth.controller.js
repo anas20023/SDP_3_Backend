@@ -13,6 +13,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!
  * POST /api/auth/register
  */
 export const handleRegister = async (req, res) => {
+    //console.log("handleRegister hit", req.body);
     const {
         name,
         user_id,
@@ -47,13 +48,15 @@ export const handleRegister = async (req, res) => {
 
     try {
         /* 4. Student ID Verification */
-        const serverData = await checkStudentID(user_id, intake);
+        //console.log("Calling checkStudentID with:", user_id, intake); // ADD THIS
+    //     const serverData = await checkStudentID(user_id, intake);
+    //    // console.log("serverData:", serverData); // ADD THIS
 
-        if (!serverData) {
-            return res.status(404).json({
-                message: 'Student not found !'
-            });
-        }
+    //     if (!serverData) {
+    //         return res.status(404).json({
+    //             message: 'Student not found !'
+    //         });
+    //     }
         // const normalizedClientName = name.trim().toLowerCase();
         // const normalizedServerName = serverData.sis_std_name.trim().toLowerCase();
 
@@ -65,7 +68,8 @@ export const handleRegister = async (req, res) => {
 
         /* 5. Register User */
         await AuthService.register({
-            name: serverData.sis_std_name,
+            // name: serverData.sis_std_name,
+            name,
             user_id,
             email,
             password,
@@ -271,7 +275,7 @@ export const updateProfile = async (req, res) => {
     }
 };
 export const handleChangePassword = async (req, res) => {
-   // console.log(req.body)
+    // console.log(req.body)
     const { oldPassword, newPassword, confirmPassword } = req.body;
     if (!oldPassword || !newPassword || !confirmPassword) {
         return res.status(400).json({
